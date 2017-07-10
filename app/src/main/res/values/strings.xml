@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyPersonalTrainer</string>
+
+    <string name="login">Login</string>
 </resources>

@@ -8,7 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,14 +27,15 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.container, loginFrag, "LoginFragment")
-                .addToBackStack(null)
+
                 .commit();
 
     }
 
     public static class LoginFragment extends Fragment{
 
-        TextView tv_hello_world;
+        @BindView(R.id.bLogin)
+        Button bLogin;
 
         public LoginFragment(){}
 
@@ -40,15 +44,20 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+            ButterKnife.bind(this, rootView);
 
-            tv_hello_world = (TextView) rootView.findViewById(R.id.tv_hello_world);
-
-            tv_hello_world.setOnClickListener(new View.OnClickListener() {
+            bLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    tv_hello_world.setText("asdf");
+                    BioFragment bioFragment = new BioFragment();
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, bioFragment, "BioFragment")
+                            .commit();
                 }
             });
+
 
             return rootView;
         }

@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Su" />
+            android:text="@string/sun" />
 
         <CheckBox
             android:id="@+id/cbMon"
@@ -31,42 +31,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="M" />
+            android:text="@string/mon" />
         <CheckBox
             android:id="@+id/cbTues"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="T" />
+            android:text="@string/tues" />
         <CheckBox
             android:id="@+id/cbWed"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="W" />
+            android:text="@string/wed" />
         <CheckBox
             android:id="@+id/cbThurs"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Th" />
+            android:text="@string/thurs" />
         <CheckBox
             android:id="@+id/cbFri"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="F" />
+            android:text="@string/mon" />
         <CheckBox
             android:id="@+id/cbSat"
             style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sa" />
+            android:text="@string/sat" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday"
+        android:padding="@dimen/activity_vertical_margin"
+        android:id="@+id/tvMonday"/>
 </LinearLayout>

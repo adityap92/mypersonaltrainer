@@ -2,4 +2,22 @@
     <string name="app_name">MyPersonalTrainer</string>
 
     <string name="login">Login</string>
+
+    <string name="mon">M</string>
+    <string name="tues">T</string>
+    <string name="wed">W</string>
+    <string name="thurs">Th</string>
+    <string name="fri">F</string>
+    <string name="sat">Sa</string>
+    <string name="sun">Su</string>
+
+    <string name="name">Name</string>
+    <string name="gender">Gender</string>
+    <string name="weight">Weight</string>
+    <string name="height">Height</string>
+    <string name="activity_levels">Activity Level</string>
+    <string name="goals">Goals</string>
+
+    <string name="next">NEXT</string>
+
 </resources>

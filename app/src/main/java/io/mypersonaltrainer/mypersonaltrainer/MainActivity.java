@@ -20,15 +20,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(savedInstanceState==null){
+            LoginFragment loginFrag = new LoginFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, loginFrag, "LoginFragment")
+                    .commit();
+        }
 
-
-
-        LoginFragment loginFrag = new LoginFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container, loginFrag, "LoginFragment")
-
-                .commit();
 
     }
 

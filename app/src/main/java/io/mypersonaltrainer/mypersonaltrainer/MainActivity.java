@@ -113,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch(id){
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             //action when sign out is selected from menu
             case R.id.menu_sign_out:
                     signOut();

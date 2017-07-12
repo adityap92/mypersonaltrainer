@@ -23,6 +23,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     public final String TAG = MainActivity.class.getSimpleName();
     public Context mContext;
+    LoginFragment loginFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         if(savedInstanceState==null){
-            LoginFragment loginFrag = new LoginFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .add(R.id.container, loginFrag, "LoginFragment")
-                    .commit();
+            loginFragment = new LoginFragment();
+            openFragment(loginFragment);
         }
 
         // Configure sign-in to request the user's ID, email address, and basic
@@ -88,17 +89,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openBioFragment(){
-
-        BioFragment bioFragment = new BioFragment();
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, bioFragment, "BioFragment")
-                .commit();
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -110,17 +100,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        signOut();
+    }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             // Sign In Successfull
             GoogleSignInAccount acct = result.getSignInAccount();
             Toast.makeText(mContext,"Name: " + acct.getDisplayName(), Toast.LENGTH_SHORT).show();
-            openBioFragment();
+            BioFragment bioFrag = new BioFragment();
+            openFragment(bioFrag);
         } else {
             // Signed out, show unauthenticated UI.
             Toast.makeText(mContext,"Not Logged in", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void openFragment(Fragment frag){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, frag)
+                .commit();
+    }
+
+    public void signOut(){
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(@NonNull Status status) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                openFragment(loginFragment);
+            }
+        });
     }
 
     public static class LoginFragment extends Fragment{

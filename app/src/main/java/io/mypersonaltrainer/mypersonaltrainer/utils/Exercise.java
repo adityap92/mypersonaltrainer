@@ -1,10 +1,12 @@
 package io.mypersonaltrainer.mypersonaltrainer.utils;
 
+import java.io.Serializable;
+
 /**
  * Created by aditya on 7/12/17.
  */
 
-public class Exercise {
+public class Exercise implements Serializable {
 
     String exerciseName;
     String exerciseInstruction;

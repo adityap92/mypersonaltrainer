@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -72,14 +72,14 @@ public class WorkoutFragment extends Fragment {
 
             @BindView(R.id.tvWorkoutCard)
             TextView tvName;
-            @BindView(R.id.cardExercise)
-            CardView cardExercise;
             @BindView(R.id.npWeight)
             NumberPicker npWeight;
             @BindView(R.id.npSets)
             NumberPicker npSets;
             @BindView(R.id.npReps)
             NumberPicker npReps;
+            @BindView(R.id.bMoreInfo)
+            Button bMoreInfo;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -106,11 +106,17 @@ public class WorkoutFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            final int pos = position;
             holder.tvName.setText(currWorkout.getExercises().get(position).getExerciseName());
-            holder.cardExercise.setOnClickListener(new View.OnClickListener() {
+
+            holder.bMoreInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ExerciseDetailFragment detailFragment = new ExerciseDetailFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("exercise", currWorkout.getExercises().get(pos));
+                    detailFragment.setArguments(bundle);
+                    //replace fragment
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, detailFragment)

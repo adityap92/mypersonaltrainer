@@ -113,10 +113,10 @@ public class MainActivity extends AppCompatActivity {
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
+            // Sign In Successfull
             GoogleSignInAccount acct = result.getSignInAccount();
-            //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
             Toast.makeText(mContext,"Name: " + acct.getDisplayName(), Toast.LENGTH_SHORT).show();
+            openBioFragment();
         } else {
             // Signed out, show unauthenticated UI.
             Toast.makeText(mContext,"Not Logged in", Toast.LENGTH_SHORT).show();

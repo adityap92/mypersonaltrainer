@@ -15,4 +15,8 @@ public class Exercise {
         this.exerciseInstruction = exerciseInstruction;
         this.vidUrl = vidUrl;
     }
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
 }

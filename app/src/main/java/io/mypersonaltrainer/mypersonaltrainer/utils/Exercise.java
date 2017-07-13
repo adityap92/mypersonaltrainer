@@ -21,4 +21,12 @@ public class Exercise implements Serializable {
     public String getExerciseName() {
         return exerciseName;
     }
+
+    public String getExerciseInstruction() {
+        return exerciseInstruction;
+    }
+
+    public String getVidUrl() {
+        return vidUrl;
+    }
 }

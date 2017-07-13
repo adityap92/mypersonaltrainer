@@ -3,6 +3,7 @@ package io.mypersonaltrainer.mypersonaltrainer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,8 @@ public class WorkoutFragment extends Fragment {
     RecyclerView.LayoutManager rvLayoutManager;
     RecyclerView.Adapter rvAdapter;
     Context mContext;
+//    @BindView(R.id.fab)
+//    FloatingActionButton fab;
 
     public WorkoutFragment(){}
 
@@ -43,13 +46,22 @@ public class WorkoutFragment extends Fragment {
         mContext = getContext();
 
         Workout armWorkout = new Workout("Arms");
-        armWorkout.addExercise(new Exercise("Bicep Curl", "Curl Arm",""));
-        armWorkout.addExercise(new Exercise("Tricep Extension", "Extend Tricep",""));
+        armWorkout.addExercise(new Exercise("Bicep Curl", "Curl Arm","ykJmrZ5v0Oo"));
+        armWorkout.addExercise(new Exercise("Tricep Extension", "Extend Tricep","_gsUck-7M74"));
+        armWorkout.addExercise(new Exercise("Shoulder Press", "Lift weight with shoulders","B-aVuyhvLHU"));
+        armWorkout.addExercise(new Exercise("Preacher Curl", "Use rope to curl", "DoCWeUBA0Gs"));
 
         rvLayoutManager = new LinearLayoutManager(mContext);
         rvAdapter = new ExercisesAdapter(armWorkout);
         rvExercises.setLayoutManager(rvLayoutManager);
         rvExercises.setAdapter(rvAdapter);
+
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         return view;
     }
@@ -80,6 +92,8 @@ public class WorkoutFragment extends Fragment {
             NumberPicker npReps;
             @BindView(R.id.bMoreInfo)
             Button bMoreInfo;
+            @BindView(R.id.bSave)
+            Button bSave;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -107,6 +121,7 @@ public class WorkoutFragment extends Fragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             final int pos = position;
+            final View v = holder.itemView;
             holder.tvName.setText(currWorkout.getExercises().get(position).getExerciseName());
 
             holder.bMoreInfo.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +137,15 @@ public class WorkoutFragment extends Fragment {
                             .replace(R.id.container, detailFragment)
                             .addToBackStack(null)
                             .commit();
+                }
+            });
+
+            holder.bSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar mySnackbar = Snackbar.make(v,
+                            getString(R.string.save), Snackbar.LENGTH_SHORT);
+                    mySnackbar.show();
                 }
             });
         }

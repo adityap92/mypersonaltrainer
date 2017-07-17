@@ -3,7 +3,6 @@ package io.mypersonaltrainer.mypersonaltrainer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -92,8 +91,6 @@ public class WorkoutFragment extends Fragment {
             NumberPicker npReps;
             @BindView(R.id.bMoreInfo)
             Button bMoreInfo;
-            @BindView(R.id.bSave)
-            Button bSave;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -137,15 +134,6 @@ public class WorkoutFragment extends Fragment {
                             .replace(R.id.container, detailFragment)
                             .addToBackStack(null)
                             .commit();
-                }
-            });
-
-            holder.bSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar mySnackbar = Snackbar.make(v,
-                            getString(R.string.save), Snackbar.LENGTH_SHORT);
-                    mySnackbar.show();
                 }
             });
         }

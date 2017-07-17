@@ -2,6 +2,7 @@ package io.mypersonaltrainer.mypersonaltrainer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +34,8 @@ public class PlannerFragment extends Fragment {
     TextView tvMonday;
     @BindView(R.id.lvDaysOfWeek)
     ListView lvWeekDays;
+    @BindView(R.id.tvPlannerDate)
+    TextView tvPlannerDate;
     private Unbinder unbinder;
     Context mContext;
 
@@ -39,9 +48,30 @@ public class PlannerFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         mContext= getContext();
 
+        String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
+        tvPlannerDate.setText(formattedDate);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        Date d = new Date();
+        String dayOfTheWeek = sdf.format(d);
+        List<String> arr = Arrays.asList(getResources().getStringArray(R.array.days_of_week));
+        final int pos = arr.indexOf(dayOfTheWeek);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
                 android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.days_of_week));
+                getResources().getStringArray(R.array.days_of_week)){
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = super.getView(position,convertView,parent);
+
+                if(position == pos){
+                    v.setBackgroundResource(R.color.colorAccent);
+                }else
+                    v.setBackgroundResource(android.R.color.white);
+                return v;
+            }
+        };
         lvWeekDays.setAdapter(adapter);
 
         lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {

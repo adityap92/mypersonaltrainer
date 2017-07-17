@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reps"
+                android:text="Sets"
                 android:layout_gravity="center_vertical"/>
             <NumberPicker
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sets"
+                android:text="Reps"
                 android:layout_gravity="center_vertical"/>
             <NumberPicker
                 android:layout_width="wrap_content"
@@ -68,14 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/bMoreInfo"
-                    android:layout_weight="1"
                     android:text="@string/more_info"/>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/bSave"
-                    android:layout_weight="1"
-                    android:text="@string/save"/>
 
             </LinearLayout>
         </LinearLayout>

@@ -28,8 +28,7 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
                 DBContract.UsersEntry.COLUMN_USER_GENDER + " TEXT NOT NULL, " +
                 DBContract.UsersEntry.COLUMN_USER_HEIGHT + " TEXT NOT NULL, " +
                 DBContract.UsersEntry.COLUMN_USER_WEIGHT + " TEXT NOT NULL, " +
-                DBContract.UsersEntry.COLUMN_USER_ACTIVITY_LEVEL + " TEXT NOT NULL, " +
-                DBContract.UsersEntry.COLUMN_USER_GOALS + " TEXT NOT NULL " +
+                DBContract.UsersEntry.COLUMN_USER_ACTIVITY_LEVEL + " TEXT NOT NULL " +
                 ");";
         //create Users Table
         db.execSQL(SQL_CREATE_USERS_TABLE);
@@ -45,14 +44,17 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
         //create Planner Table
         db.execSQL(SQL_CREATE_PLANNER_TABLE);
 
-        //define Planner Table
+        //define Workout Table
         final String SQL_CREATE_WORKOUT_TABLE = "CREATE TABLE " +
                 DBContract.WorkoutEntry.TABLE_NAME + " (" +
                 DBContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 DBContract.WorkoutEntry.COLUMN_DATE + " TEXT NOT NULL, " +
-                DBContract.WorkoutEntry.COLUMN_EXERCISE_IDS + " INTEGER NOT NULL " +
+                DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " INTEGER NOT NULL, " +
+                DBContract.WorkoutEntry.COLUMN_WEIGHT + " INTEGER NOT NULL, " +
+                DBContract.WorkoutEntry.COLUMN_SETS + " INTEGER NOT NULL, " +
+                DBContract.WorkoutEntry.COLUMN_REPS + " INTEGER NOT NULL " +
                 ");";
-        //create Planner Table
+        //create Workout Table
         db.execSQL(SQL_CREATE_WORKOUT_TABLE);
     }
 

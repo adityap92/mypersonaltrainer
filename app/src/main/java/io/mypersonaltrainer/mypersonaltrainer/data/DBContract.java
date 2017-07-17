@@ -28,7 +28,6 @@ public class DBContract {
         public static final String COLUMN_USER_HEIGHT = "height";
         public static final String COLUMN_USER_WEIGHT = "weight";
         public static final String COLUMN_USER_ACTIVITY_LEVEL = "activityLevel";
-        public static final String COLUMN_USER_GOALS = "goals";
     }
 
     public static final class PlannerEntry implements BaseColumns {
@@ -50,7 +49,10 @@ public class DBContract {
 
         public static final String TABLE_NAME = "workout";
         public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_EXERCISE_IDS = "exerciseIds";
+        public static final String COLUMN_EXERCISE_ID = "exerciseId";
+        public static final String COLUMN_WEIGHT = "weight";
+        public static final String COLUMN_SETS = "reps";
+        public static final String COLUMN_REPS = "sets";
     }
 
 }

@@ -1,6 +1,7 @@
 package io.mypersonaltrainer.mypersonaltrainer.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -31,6 +32,8 @@ public class FitnessContentProvider extends ContentProvider {
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_USERS +"/#", USERS);
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_PLANNER, PLANNER);
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_PLANNER +"/#", PLANNER);
+        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_WORKOUT, WORKOUT);
+        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_WORKOUT + "/#", WORKOUT);
 
         return uriMatcher;
     }
@@ -95,7 +98,25 @@ public class FitnessContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        final SQLiteDatabase db = database.getWritableDatabase();
+
+        int match = sUriMatcher.match(uri);
+
+        Uri returnUri;
+
+        switch(match){
+            case USERS:
+                long id = db.insert(DBContract.UsersEntry.TABLE_NAME, null, contentValues);
+
+                if(id > 0)
+                    returnUri = ContentUris.withAppendedId(DBContract.UsersEntry.CONTENT_URI, id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into: " + uri);
+                break;
+            default:
+                throw new android.database.SQLException("Unknown URI: " + uri);
+        }
+        return returnUri;
     }
 
     @Override

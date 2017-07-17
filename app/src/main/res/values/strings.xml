@@ -13,11 +13,13 @@
 
     <string name="name">Name</string>
     <string name="gender">Gender</string>
-    <string name="weight">Weight</string>
-    <string name="height">Height</string>
+    <string name="weight">Weight (lbs)</string>
+    <string name="height">Height (in)</string>
     <string name="activity_levels">Activity Level</string>
     <string name="goals">Goals</string>
     <string name="instructions">Instructions:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
     <string name="next">NEXT</string>
     <string name="sign_out">Sign Out</string>

@@ -20,6 +20,7 @@
     <string name="instructions">Instructions:</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="welcome_back">Welcome Back,</string>
 
     <string name="next">NEXT</string>
     <string name="sign_out">Sign Out</string>

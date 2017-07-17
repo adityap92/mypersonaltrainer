@@ -2,9 +2,12 @@ package io.mypersonaltrainer.mypersonaltrainer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,6 +32,7 @@ import com.google.android.gms.common.api.Status;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -64,42 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+                        Log.e(TAG, "Google API client Failed to Connect");
                     }
                 } /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        OptionalPendingResult<GoogleSignInResult> opr = Auth
-                .GoogleSignInApi.silentSignIn(mGoogleApiClient);
-
-        if(opr.isDone()){
-            Log.d(TAG, "Sign in was cached");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        }else{
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
-                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
     }
 
     @Override
@@ -125,26 +98,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        signOut();
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            // Sign In Successfull
-            GoogleSignInAccount acct = result.getSignInAccount();
-            Toast.makeText(mContext,"Name: " + acct.getDisplayName(), Toast.LENGTH_SHORT).show();
-            BioFragment bioFrag = new BioFragment();
-            openFragment(bioFrag);
-        } else {
-            // Signed out, show unauthenticated UI.
-            Toast.makeText(mContext,"Not Logged in", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void openFragment(Fragment frag){
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -166,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
         @BindView(R.id.sign_in_button)
         SignInButton bLogin;
+        Context mContext;
+        public final String TAG = LoginFragment.class.getSimpleName();
 
         public LoginFragment(){}
 
@@ -176,18 +131,14 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_login, container, false);
             ButterKnife.bind(this, rootView);
 
-
+            mContext = getContext();
 
             bLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     signIn();
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, new BioFragment())
-                            .commit();
                 }
             });
-
 
             return rootView;
         }
@@ -195,6 +146,99 @@ public class MainActivity extends AppCompatActivity {
         public void signIn() {
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
+
+        private void handleSignInResult(GoogleSignInResult result) {
+            Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+            if (result.isSuccess()) {
+                // Sign In Successful
+                GoogleSignInAccount acct = result.getSignInAccount();
+                isUserExist(acct.getDisplayName());
+            } else {
+                // Signed out, show unauthenticated UI.
+                Snackbar.make(getView(), "Not Logged in", Snackbar.LENGTH_SHORT).show();
+            }
+        }
+
+        private void startBioFrag(Bundle bundle){
+            BioFragment bioFrag = new BioFragment();
+            bioFrag.setArguments(bundle);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, bioFrag)
+                    .commit();
+        }
+
+        private void isUserExist(String name){
+
+            String[] projection = {
+                    DBContract.UsersEntry.COLUMN_USER_NAME
+            };
+
+            String selection = DBContract.UsersEntry.COLUMN_USER_NAME + " = ?";
+            String[] selectionArgs = {name};
+
+            Cursor cursor = mContext.getContentResolver().query(DBContract.UsersEntry.CONTENT_URI,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,null);
+
+            if(cursor.getCount()>0){
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.welcome_back) + " " + name +"!",
+                        Snackbar.LENGTH_LONG);
+                int snackbarTextId = android.support.design.R.id.snackbar_text;
+                View view = snackbar.getView();
+                TextView textView = (TextView) view.findViewById(snackbarTextId);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    textView.setTextColor(getResources().getColor(R.color.white, null));
+                }
+                snackbar.show();
+
+
+                PlannerFragment plannerFragment = new PlannerFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, plannerFragment)
+                        .commit();
+            }
+            else{
+                Bundle bundle = new Bundle();
+                bundle.putString("full_name", name);
+                startBioFrag(bundle);
+            }
+
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+            if (requestCode == RC_SIGN_IN) {
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+                handleSignInResult(result);
+            }
+        }
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            OptionalPendingResult<GoogleSignInResult> opr = Auth
+                    .GoogleSignInApi.silentSignIn(mGoogleApiClient);
+
+            if(opr.isDone()){
+                Log.d(TAG, "Sign in was cached");
+                GoogleSignInResult result = opr.get();
+                handleSignInResult(result);
+            }else{
+                opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                    @Override
+                    public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                        handleSignInResult(googleSignInResult);
+                    }
+                });
+            }
         }
     }
 

@@ -30,8 +30,6 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
                 DBContract.UsersEntry.COLUMN_USER_WEIGHT + " TEXT NOT NULL, " +
                 DBContract.UsersEntry.COLUMN_USER_ACTIVITY_LEVEL + " TEXT NOT NULL " +
                 ");";
-        //create Users Table
-        db.execSQL(SQL_CREATE_USERS_TABLE);
 
         //define Planner Table
         final String SQL_CREATE_PLANNER_TABLE = "CREATE TABLE " +
@@ -41,8 +39,6 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
                 DBContract.PlannerEntry.COLUMN_USER_ID + " INTEGER NOT NULL, " +
                 DBContract.PlannerEntry.COLUMN_WORKOUT_ID + " INTEGER NOT NULL" +
                 ");";
-        //create Planner Table
-        db.execSQL(SQL_CREATE_PLANNER_TABLE);
 
         //define Workout Table
         final String SQL_CREATE_WORKOUT_TABLE = "CREATE TABLE " +
@@ -54,6 +50,13 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
                 DBContract.WorkoutEntry.COLUMN_SETS + " INTEGER NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_REPS + " INTEGER NOT NULL " +
                 ");";
+
+        //create Users Table
+        db.execSQL(SQL_CREATE_USERS_TABLE);
+
+        //create Planner Table
+        db.execSQL(SQL_CREATE_PLANNER_TABLE);
+
         //create Workout Table
         db.execSQL(SQL_CREATE_WORKOUT_TABLE);
     }
@@ -63,6 +66,7 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + DBContract.UsersEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DBContract.PlannerEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DBContract.WorkoutEntry.TABLE_NAME);
         onCreate(db);
 
     }

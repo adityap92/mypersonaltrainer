@@ -3,8 +3,11 @@ package io.mypersonaltrainer.mypersonaltrainer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -17,6 +20,8 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
+import io.mypersonaltrainer.mypersonaltrainer.utils.Exercise;
 import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
 
 import static io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder.map;
@@ -30,7 +35,7 @@ public class AddExerciseDialog extends DialogFragment {
     ExpandableListView elv;
     int selGroup, selChild;
     ExercisesAdapter adapter;
-
+    String date;
 
 
 
@@ -44,6 +49,10 @@ public class AddExerciseDialog extends DialogFragment {
         elv.setAdapter(adapter);
         selGroup =-1;
         selChild=-1;
+
+        Bundle bundle = getArguments();
+        if(bundle!=null)
+            date = bundle.getString("date");
 
 
         elv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -89,8 +98,28 @@ public class AddExerciseDialog extends DialogFragment {
                             }
                             snackbar.show();
                         }else{
-                            WorkoutFragment.currWorkout.addExercise(ExerciseHolder.map.get(ExerciseHolder.exerciseNames.get(selGroup)).get(selChild));
+                            Exercise e = ExerciseHolder.map.get(
+                                    ExerciseHolder.exerciseNames.get(selGroup)).get(selChild);
+                            WorkoutFragment.currWorkout.addExercise(e);
                             WorkoutFragment.rvAdapter.notifyDataSetChanged();
+                            if(!isWorkoutExist()){
+
+                                ContentValues cvWorkout = new ContentValues();
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID,e.getId());
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, 0);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_SETS, 3);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_REPS,10);
+
+                                Uri uri = getContext().getContentResolver().insert(DBContract.WorkoutEntry.CONTENT_URI, cvWorkout);
+
+                                if(uri!=null){
+                                    ContentValues cvPlanner = new ContentValues();
+                                    cvPlanner.put(DBContract.PlannerEntry.COLUMN_DATE, date);
+                                    cvPlanner.put(DBContract.PlannerEntry.COLUMN_WORKOUT_ID,uri.getLastPathSegment());
+
+                                    getContext().getContentResolver().insert(DBContract.PlannerEntry.CONTENT_URI,cvPlanner);
+                                }
+                            }
                             dialog.dismiss();
                         }
                     }
@@ -98,9 +127,21 @@ public class AddExerciseDialog extends DialogFragment {
             }
         });
 
-
-
         return dialog;
+    }
+
+    public boolean isWorkoutExist(){
+
+        String[] projection = { DBContract.PlannerEntry.COLUMN_DATE };
+        String selection = DBContract.PlannerEntry.COLUMN_DATE + " = ?";
+        String[] selectionArgs = {date};
+
+        Cursor cursor = getContext().getContentResolver().query(DBContract.PlannerEntry.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                null,null);
+        return cursor.getCount()>0;
     }
 
 

@@ -113,6 +113,20 @@ public class FitnessContentProvider extends ContentProvider {
                 else
                     throw new android.database.SQLException("Failed to insert row into: " + uri);
                 break;
+            case PLANNER:
+                long id1 = db.insert(DBContract.PlannerEntry.TABLE_NAME, null, contentValues);
+                if(id1 > 0)
+                    returnUri = ContentUris.withAppendedId(DBContract.PlannerEntry.CONTENT_URI, id1);
+                else
+                    throw new android.database.SQLException("Failed to insert row into: " + uri);
+                break;
+            case WORKOUT:
+                long id2 = db.insert(DBContract.WorkoutEntry.TABLE_NAME, null, contentValues);
+                if(id2 > 0)
+                    returnUri = ContentUris.withAppendedId(DBContract.WorkoutEntry.CONTENT_URI, id2);
+                else
+                    throw new android.database.SQLException("Failed to insert row into: " + uri);
+                break;
             default:
                 throw new android.database.SQLException("Unknown URI: " + uri);
         }

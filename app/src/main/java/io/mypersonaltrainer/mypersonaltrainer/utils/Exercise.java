@@ -26,6 +26,10 @@ public class Exercise implements Serializable {
         this.muscleGroup="";
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getExerciseName() {
         return exerciseName;
     }

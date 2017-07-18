@@ -38,6 +38,7 @@ public class PlannerFragment extends Fragment {
     TextView tvPlannerDate;
     private Unbinder unbinder;
     Context mContext;
+    Calendar cal;
 
     public PlannerFragment(){}
 
@@ -47,15 +48,16 @@ public class PlannerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext= getContext();
+        cal = Calendar.getInstance();
 
-        String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
+        final String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(cal.getTime());
         tvPlannerDate.setText(formattedDate);
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
         List<String> arr = Arrays.asList(getResources().getStringArray(R.array.days_of_week));
-        final int pos = arr.indexOf(dayOfTheWeek);
+        final int posInWeek = arr.indexOf(dayOfTheWeek);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
                 android.R.layout.simple_list_item_1,
@@ -65,7 +67,7 @@ public class PlannerFragment extends Fragment {
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View v = super.getView(position,convertView,parent);
 
-                if(position == pos){
+                if(position == posInWeek){
                     v.setBackgroundResource(R.color.colorAccent);
                 }else
                     v.setBackgroundResource(android.R.color.white);
@@ -77,7 +79,14 @@ public class PlannerFragment extends Fragment {
         lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                int diff = pos - posInWeek;
+                cal.add(Calendar.DATE, diff);
+
+
                 WorkoutFragment workoutFragment = new WorkoutFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("date", new SimpleDateFormat("MM/dd/yyyy").format(cal.getTime()));
+                workoutFragment.setArguments(bundle);
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, workoutFragment)

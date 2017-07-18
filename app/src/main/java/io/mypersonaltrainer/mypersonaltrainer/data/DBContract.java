@@ -37,7 +37,6 @@ public class DBContract {
 
         public static final String TABLE_NAME = "planner";
         public static final String COLUMN_DATE = "date";
-        public static final String COLUMN_USER_ID = "userId";
         public static final String COLUMN_WORKOUT_ID = "workoutId";
 
     }
@@ -48,7 +47,6 @@ public class DBContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_WORKOUT).build();
 
         public static final String TABLE_NAME = "workout";
-        public static final String COLUMN_DATE = "date";
         public static final String COLUMN_EXERCISE_ID = "exerciseId";
         public static final String COLUMN_WEIGHT = "weight";
         public static final String COLUMN_SETS = "reps";

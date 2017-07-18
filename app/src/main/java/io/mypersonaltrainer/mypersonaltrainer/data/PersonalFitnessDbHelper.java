@@ -36,7 +36,6 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
                 DBContract.PlannerEntry.TABLE_NAME + " (" +
                 DBContract.PlannerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 DBContract.PlannerEntry.COLUMN_DATE + " TEXT NOT NULL, " +
-                DBContract.PlannerEntry.COLUMN_USER_ID + " INTEGER NOT NULL, " +
                 DBContract.PlannerEntry.COLUMN_WORKOUT_ID + " INTEGER NOT NULL" +
                 ");";
 
@@ -44,7 +43,6 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_WORKOUT_TABLE = "CREATE TABLE " +
                 DBContract.WorkoutEntry.TABLE_NAME + " (" +
                 DBContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DBContract.WorkoutEntry.COLUMN_DATE + " TEXT NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " INTEGER NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_WEIGHT + " INTEGER NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_SETS + " INTEGER NOT NULL, " +

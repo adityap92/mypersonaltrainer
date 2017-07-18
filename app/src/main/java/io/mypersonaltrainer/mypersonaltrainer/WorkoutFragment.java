@@ -41,6 +41,7 @@ public class WorkoutFragment extends Fragment {
     @BindView(R.id.menu)
     FloatingActionMenu fab;
     public static Workout currWorkout;
+    String formattedDate;
 
     public WorkoutFragment(){}
 
@@ -51,11 +52,10 @@ public class WorkoutFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view1);
         mContext = getContext();
 
-//        Workout armWorkout = new Workout("Arms");
-//        armWorkout.addExercise(new Exercise("0","Bicep Curl", "Curl Arm","ykJmrZ5v0Oo"));
-//        armWorkout.addExercise(new Exercise("1","Tricep Extension", "Extend Tricep","_gsUck-7M74"));
-//        armWorkout.addExercise(new Exercise("2","Shoulder Press", "Lift weight with shoulders","B-aVuyhvLHU"));
-//        armWorkout.addExercise(new Exercise("3","Preacher Curl", "Use rope to curl", "DoCWeUBA0Gs"));
+        Bundle bundle = getArguments();
+        if(bundle!=null)
+            formattedDate = bundle.getString("date");
+
         currWorkout = new Workout();
 
         rvLayoutManager = new LinearLayoutManager(mContext);
@@ -68,6 +68,9 @@ public class WorkoutFragment extends Fragment {
             public void onClick(View view) {
                 fab.close(true);
                 AddExerciseDialog dialog = new AddExerciseDialog();
+                Bundle b = new Bundle();
+                b.putString("date", formattedDate);
+                dialog.setArguments(b);
                 dialog.show(getFragmentManager(),"dialog");
             }
         });

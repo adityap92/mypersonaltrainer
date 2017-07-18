@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -29,11 +32,15 @@ public class WorkoutFragment extends Fragment {
     private Unbinder unbinder;
     @BindView(R.id.rvExercises)
     RecyclerView rvExercises;
+    @BindView(R.id.fbAddExercise)
+    FloatingActionButton fbAddExercise;
+    @BindView(R.id.fbAddCustomExercise)
+    FloatingActionButton fbAddCustomExercise;
     RecyclerView.LayoutManager rvLayoutManager;
     RecyclerView.Adapter rvAdapter;
     Context mContext;
-//    @BindView(R.id.fab)
-//    FloatingActionButton fab;
+    @BindView(R.id.menu)
+    FloatingActionMenu fab;
 
     public WorkoutFragment(){}
 
@@ -45,22 +52,33 @@ public class WorkoutFragment extends Fragment {
         mContext = getContext();
 
         Workout armWorkout = new Workout("Arms");
-        armWorkout.addExercise(new Exercise("Bicep Curl", "Curl Arm","ykJmrZ5v0Oo"));
-        armWorkout.addExercise(new Exercise("Tricep Extension", "Extend Tricep","_gsUck-7M74"));
-        armWorkout.addExercise(new Exercise("Shoulder Press", "Lift weight with shoulders","B-aVuyhvLHU"));
-        armWorkout.addExercise(new Exercise("Preacher Curl", "Use rope to curl", "DoCWeUBA0Gs"));
+        armWorkout.addExercise(new Exercise("0","Bicep Curl", "Curl Arm","ykJmrZ5v0Oo"));
+        armWorkout.addExercise(new Exercise("1","Tricep Extension", "Extend Tricep","_gsUck-7M74"));
+        armWorkout.addExercise(new Exercise("2","Shoulder Press", "Lift weight with shoulders","B-aVuyhvLHU"));
+        armWorkout.addExercise(new Exercise("3","Preacher Curl", "Use rope to curl", "DoCWeUBA0Gs"));
 
         rvLayoutManager = new LinearLayoutManager(mContext);
         rvAdapter = new ExercisesAdapter(armWorkout);
         rvExercises.setLayoutManager(rvLayoutManager);
         rvExercises.setAdapter(rvAdapter);
 
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        fbAddExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddExerciseDialog dialog = new AddExerciseDialog();
+                dialog.show(getFragmentManager(),"dialog");
+            }
+        });
+
+        fbAddCustomExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddCustomExerciseDialog dialog = new AddCustomExerciseDialog();
+                dialog.show(getFragmentManager(), "customDialog");
+            }
+        });
+
+        fab.setClosedOnTouchOutside(true);
 
         return view;
     }

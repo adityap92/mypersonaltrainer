@@ -6,4 +6,5 @@
     <dimen name="card_radius">8dp</dimen>
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="fab_Z_trans">12dp</dimen>
+    <dimen name="child_view_horiz_margin">20dp</dimen>
 </resources>

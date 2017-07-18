@@ -21,6 +21,8 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="welcome_back">Welcome Back,</string>
+    <string name="dialog_name">New Exercise</string>
+    <string name="exercise_description">Exercise Description</string>
 
     <string name="next">NEXT</string>
     <string name="sign_out">Sign Out</string>

@@ -8,11 +8,13 @@ import java.io.Serializable;
 
 public class Exercise implements Serializable {
 
+    String id;
     String exerciseName;
     String exerciseInstruction;
     String vidUrl;
 
-    public Exercise(String exerciseName, String exerciseInstruction, String vidUrl){
+    public Exercise(String id,String exerciseName, String exerciseInstruction, String vidUrl){
+        this.id = id;
         this.exerciseName = exerciseName;
         this.exerciseInstruction = exerciseInstruction;
         this.vidUrl = vidUrl;

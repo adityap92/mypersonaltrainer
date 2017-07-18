@@ -13,8 +13,8 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom|end"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
@@ -56,20 +56,31 @@
         fab:menu_backgroundColor="@android:color/transparent">
 
         <com.github.clans.fab.FloatingActionButton
-            app:theme="@style/MenuButtonsStyle"
+            android:theme="@style/MenuButtonsStyle"
             android:id="@+id/menu_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_save_white_24dp"
-            fab:fab_label="Save" />
+            fab:fab_label="Save"
+            fab:fab_size="mini"/>
 
         <com.github.clans.fab.FloatingActionButton
-            app:theme="@style/MenuButtonsStyle"
-            android:id="@+id/menu_item2"
+            android:theme="@style/MenuButtonsStyle"
+            android:id="@+id/fbAddCustomExercise"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
-            fab:fab_label="Add Exercise" />
+            fab:fab_label="Add Custom Exercise"
+            fab:fab_size="mini"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:theme="@style/MenuButtonsStyle"
+            android:id="@+id/fbAddExercise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab_add"
+            fab:fab_label="Add Exercise"
+            fab:fab_size="mini"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 

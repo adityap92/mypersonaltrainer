@@ -1,0 +1,133 @@
+{
+	"Arms":[
+			{
+				"id": "0",
+				"name": "Bicep Curl",
+				"description" : "Curl arm",
+				"vidUrl":"ykJmrZ5v0Oo"
+			},
+			{
+				"id": "1",
+				"name": "Tricep Extension",
+				"description" : "Extend Tricep",
+				"vidUrl":"_gsUck-7M74"
+			},
+			{
+				"id": "2",
+				"name": "Preacher Curl",
+				"description" : "One arm isolated curl",
+				"vidUrl":"DoCWeUBA0Gs"
+			},
+			{
+				"id": "3",
+				"name": "Barbell Curl",
+				"description" : "Use a weighted Barbell to curl with both arms",
+				"vidUrl":"kwG2ipFRgfo"
+			}
+	],
+
+	"Back":[
+			{
+				"id": "4",
+				"name": "Lat Pull Down",
+				"description" : "Pull bar to chin level. Do not overexert and bend at the waist.",
+				"vidUrl":"aHdzhM2oA6A"
+			},
+			{
+				"id": "5",
+				"name": "Deadlift",
+				"description" : "Keep feet shoulder width apart. Keep Movement as vertical as possible as you lift with your lower back.",
+				"vidUrl":"WFUOtnI1jwk"
+			},
+			{
+				"id": "6",
+				"name": "Barbell Row",
+				"description" : "The Bent Over Row is an exercise that tones and strengthens the lattissimus dorsi, the largest muscle in your back",
+				"vidUrl":"I-qgwlP0J90"
+			},
+			{
+				"id": "7",
+				"name": "T-Bar Row",
+				"description" : "Use machine and follow directions",
+				"vidUrl":"j3Igk5nyZE4"
+			}
+	],
+	"Chest":[
+			{
+				"id": "8",
+				"name": "Bench Press",
+				"description" : "Press with chest. Bring bar down to your chest and push straight up.",
+				"vidUrl":"vthMCtgVtFw"
+			},
+			{
+				"id": "9",
+				"name": "Flys",
+				"description" : "Use either cables or dumbbells. Hold weights above your chest and let them slowly fall away from your body. Clench chest as your bring them back together.",
+				"vidUrl":"S298ziysRdI"
+			},
+			{
+				"id": "10",
+				"name": "Push-Ups",
+				"description" : "Get in Push Up position. Commence push ups.",
+				"vidUrl":"IODxDxX7oi4"
+			},
+			{
+				"id": "11",
+				"name": "Incline Bench Press",
+				"description" : "Same thing as bench press, except on an incline.",
+				"vidUrl":"PUrfhmHszU8"
+			}
+	],
+	"Shoulder":[
+			{
+				"id": "12",
+				"name": "Shoulder Press",
+				"description" : "Lift weight with shoulders",
+				"vidUrl":"B-aVuyhvLHU"
+			},
+			{
+				"id": "13",
+				"name": "Military Press",
+				"description" : "Similar to shoulder press but with a straight bar instead of dumbbells.",
+				"vidUrl":"waeCyaAQRn8"
+			},
+			{
+				"id": "14",
+				"name": "Cable Front Raise",
+				"description" : "Using a cable and both hands raise the weight directly in front of you. Do not bend your elbows.",
+				"vidUrl":"H0O4HNvtB70"
+			},
+			{
+				"id": "15",
+				"name": "Dumbbell Lateral Raise",
+				"description" : "Similar to cable front raises. Instead use a dumbbell in both hands and slowly lift as if you're trying to fly like a bird.",
+				"vidUrl":"kDqklk1ZESo"
+			}
+	],
+	"Legs":[
+			{
+				"id": "16",
+				"name": "Squats",
+				"description" : "Place bar securely above lats but below neck. Squat down slowly as shown in video.",
+				"vidUrl":"nEQQle9-0NA"
+			},
+			{
+				"id": "17",
+				"name": "Leg Press",
+				"description" : "Use machine, and follow instructions in video.",
+				"vidUrl":"xCQ-FY_bj9E"
+			},
+			{
+				"id": "18",
+				"name": "Leg Extension",
+				"description" : "Use machine to extend legs. Do not overload with too much weight. Too much weight could cause injury.",
+				"vidUrl":"vRQpiTwUeyM"
+			},
+			{
+				"id": "19",
+				"name": "Lunges",
+				"description" : "Take step forward and let standing knee almost touch the ground. Stand back up and repeat with other leg.",
+				"vidUrl":"QF0BQS2W80k"
+			}
+	]
+}

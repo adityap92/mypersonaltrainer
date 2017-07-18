@@ -30,9 +30,13 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
+import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public final String TAG = MainActivity.class.getSimpleName();
     public Context mContext;
     LoginFragment loginFragment;
+    ExerciseHolder exerciseHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        exerciseHolder = new ExerciseHolder(loadJSONFromAsset());
 
         if(savedInstanceState==null){
             loginFragment = new LoginFragment();
@@ -113,6 +120,31 @@ public class MainActivity extends AppCompatActivity {
                 openFragment(loginFragment);
             }
         });
+    }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+
+            InputStream is = getAssets().open("exercises.json");
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
     }
 
     public static class LoginFragment extends Fragment{

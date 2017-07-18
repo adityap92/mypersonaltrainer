@@ -12,12 +12,18 @@ public class Exercise implements Serializable {
     String exerciseName;
     String exerciseInstruction;
     String vidUrl;
+    int weight, sets, reps;
+    String muscleGroup;
 
     public Exercise(String id,String exerciseName, String exerciseInstruction, String vidUrl){
         this.id = id;
         this.exerciseName = exerciseName;
         this.exerciseInstruction = exerciseInstruction;
         this.vidUrl = vidUrl;
+        this.weight = 0;
+        this.sets = 3;
+        this.reps = 10;
+        this.muscleGroup="";
     }
 
     public String getExerciseName() {

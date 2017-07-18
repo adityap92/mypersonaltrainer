@@ -20,7 +20,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.mypersonaltrainer.mypersonaltrainer.utils.Exercise;
 import io.mypersonaltrainer.mypersonaltrainer.utils.Workout;
 
 /**
@@ -37,34 +36,37 @@ public class WorkoutFragment extends Fragment {
     @BindView(R.id.fbAddCustomExercise)
     FloatingActionButton fbAddCustomExercise;
     RecyclerView.LayoutManager rvLayoutManager;
-    RecyclerView.Adapter rvAdapter;
+    static RecyclerView.Adapter rvAdapter;
     Context mContext;
     @BindView(R.id.menu)
     FloatingActionMenu fab;
+    public static Workout currWorkout;
 
     public WorkoutFragment(){}
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_workout, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        final View view1 = inflater.inflate(R.layout.fragment_workout, container, false);
+        unbinder = ButterKnife.bind(this, view1);
         mContext = getContext();
 
-        Workout armWorkout = new Workout("Arms");
-        armWorkout.addExercise(new Exercise("0","Bicep Curl", "Curl Arm","ykJmrZ5v0Oo"));
-        armWorkout.addExercise(new Exercise("1","Tricep Extension", "Extend Tricep","_gsUck-7M74"));
-        armWorkout.addExercise(new Exercise("2","Shoulder Press", "Lift weight with shoulders","B-aVuyhvLHU"));
-        armWorkout.addExercise(new Exercise("3","Preacher Curl", "Use rope to curl", "DoCWeUBA0Gs"));
+//        Workout armWorkout = new Workout("Arms");
+//        armWorkout.addExercise(new Exercise("0","Bicep Curl", "Curl Arm","ykJmrZ5v0Oo"));
+//        armWorkout.addExercise(new Exercise("1","Tricep Extension", "Extend Tricep","_gsUck-7M74"));
+//        armWorkout.addExercise(new Exercise("2","Shoulder Press", "Lift weight with shoulders","B-aVuyhvLHU"));
+//        armWorkout.addExercise(new Exercise("3","Preacher Curl", "Use rope to curl", "DoCWeUBA0Gs"));
+        currWorkout = new Workout();
 
         rvLayoutManager = new LinearLayoutManager(mContext);
-        rvAdapter = new ExercisesAdapter(armWorkout);
+        rvAdapter = new ExercisesAdapter(currWorkout);
         rvExercises.setLayoutManager(rvLayoutManager);
         rvExercises.setAdapter(rvAdapter);
 
         fbAddExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fab.close(true);
                 AddExerciseDialog dialog = new AddExerciseDialog();
                 dialog.show(getFragmentManager(),"dialog");
             }
@@ -80,7 +82,7 @@ public class WorkoutFragment extends Fragment {
 
         fab.setClosedOnTouchOutside(true);
 
-        return view;
+        return view1;
     }
 
     @Override
@@ -91,10 +93,10 @@ public class WorkoutFragment extends Fragment {
 
     public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.ViewHolder>{
 
-        Workout currWorkout;
+        Workout thisWorkout;
 
         public ExercisesAdapter(Workout workout){
-            this.currWorkout = workout;
+            this.thisWorkout = workout;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
@@ -137,14 +139,14 @@ public class WorkoutFragment extends Fragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             final int pos = position;
             final View v = holder.itemView;
-            holder.tvName.setText(currWorkout.getExercises().get(position).getExerciseName());
+            holder.tvName.setText(thisWorkout.getExercises().get(position).getExerciseName());
 
             holder.bMoreInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ExerciseDetailFragment detailFragment = new ExerciseDetailFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("exercise", currWorkout.getExercises().get(pos));
+                    bundle.putSerializable("exercise", thisWorkout.getExercises().get(pos));
                     detailFragment.setArguments(bundle);
                     //replace fragment
                     FragmentManager fragmentManager = getFragmentManager();
@@ -158,7 +160,7 @@ public class WorkoutFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return currWorkout.getExercises().size();
+            return thisWorkout.getExercises().size();
         }
     }
 }

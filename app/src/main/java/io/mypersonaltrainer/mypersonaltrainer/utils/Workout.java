@@ -9,11 +9,9 @@ import java.util.ArrayList;
 public class Workout {
 
     ArrayList<Exercise> exercises;
-    String muscleGroup;
 
-    public Workout(String muscleGroup){
+    public Workout(){
         this.exercises = new ArrayList<Exercise>();
-        this.muscleGroup = muscleGroup;
     }
 
     public void addExercise(Exercise newExercise){

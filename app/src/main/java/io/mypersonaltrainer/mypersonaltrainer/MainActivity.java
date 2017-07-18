@@ -188,7 +188,15 @@ public class MainActivity extends AppCompatActivity {
                 isUserExist(acct.getDisplayName());
             } else {
                 // Signed out, show unauthenticated UI.
-                Snackbar.make(getView(), "Not Logged in", Snackbar.LENGTH_SHORT).show();
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.not_logged_in),
+                        Snackbar.LENGTH_LONG);
+                int snackbarTextId = android.support.design.R.id.snackbar_text;
+                View view = snackbar.getView();
+                TextView textView = (TextView) view.findViewById(snackbarTextId);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    textView.setTextColor(getResources().getColor(R.color.white, null));
+                }
+                snackbar.show();
             }
         }
 

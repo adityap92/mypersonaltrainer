@@ -68,6 +68,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
         currWorkout = new Workout();
 
+        ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getLoaderManager().initLoader(2,null,this);
 
         rvLayoutManager = new LinearLayoutManager(mContext);

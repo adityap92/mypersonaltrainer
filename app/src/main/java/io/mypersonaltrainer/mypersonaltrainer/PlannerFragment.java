@@ -3,7 +3,6 @@ package io.mypersonaltrainer.mypersonaltrainer;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -13,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,15 +75,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         Bundle bManager = new Bundle();
         bManager.putInt("pos",posInWeek);
         manager.initLoader(0, bManager, this);
-
-//        plannerArr = new ArrayList<>();
-//        plannerArr.add(new Planner("Sunday",""));
-//        plannerArr.add(new Planner("Monday",""));
-//        plannerArr.add(new Planner("Tuesday",""));
-//        plannerArr.add(new Planner("Wednesday",""));
-//        plannerArr.add(new Planner("Thursday",""));
-//        plannerArr.add(new Planner("Friday",""));
-//        plannerArr.add(new Planner("Saturday",""));
+        ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         adapter = new PlannerArrayAdapter(mContext,
                 R.layout.planner_view, retPlan(), posInWeek);
@@ -263,10 +253,8 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                 Bundle bundle = new Bundle();
                 bundle.putStringArray("ids",ids);
                 getLoaderManager().initLoader(1,bundle,this);
-                Log.e("PLANNER_TABLE-0", DatabaseUtils.dumpCursorToString(cursor));
                 break;
             case 1:
-                Log.e("WORKOUT_TABLE-1", DatabaseUtils.dumpCursorToString(cursor));
                 getMuscleGroup(cursor);
                 break;
         }

@@ -1,12 +1,18 @@
 package io.mypersonaltrainer.mypersonaltrainer;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +26,15 @@ import com.github.clans.fab.FloatingActionMenu;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
+import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
 import io.mypersonaltrainer.mypersonaltrainer.utils.Workout;
 
 /**
  * Created by aditya on 7/10/17.
  */
 
-public class WorkoutFragment extends Fragment {
+public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private Unbinder unbinder;
     @BindView(R.id.rvExercises)
@@ -58,6 +66,8 @@ public class WorkoutFragment extends Fragment {
 
         currWorkout = new Workout();
 
+        getLoaderManager().initLoader(2,null,this);
+
         rvLayoutManager = new LinearLayoutManager(mContext);
         rvAdapter = new ExercisesAdapter(currWorkout);
         rvExercises.setLayoutManager(rvLayoutManager);
@@ -88,10 +98,81 @@ public class WorkoutFragment extends Fragment {
         return view1;
     }
 
+    public void updateWorkouts(Cursor cur){
+        Log.e("WHATS GOOD", DatabaseUtils.dumpCursorToString(cur));
+        if(cur.moveToFirst()){
+            do{
+                String index = cur.getString(cur.getColumnIndex(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID));
+                currWorkout.addExercise(ExerciseHolder.table.get(index));
+            }while(cur.moveToNext());
+        }
+        rvAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        switch(id){
+            case 2:
+                String[] projection = {
+                        DBContract.PlannerEntry.COLUMN_DATE,
+                        DBContract.PlannerEntry.COLUMN_WORKOUT_ID
+                };
+
+                String selection = DBContract.PlannerEntry.COLUMN_DATE + "= "+"\'"+formattedDate + "\'";
+
+                return new CursorLoader(mContext, DBContract.PlannerEntry.CONTENT_URI,
+                        projection,
+                        selection,
+                        null, null);
+            case 3:
+                String date="";
+                if(args!=null){
+                    date = args.getString("date");
+                }
+                String[] projection1 = {
+                        DBContract.WorkoutEntry.COLUMN_DATE,
+                        DBContract.WorkoutEntry.COLUMN_EXERCISE_ID
+                };
+
+                String selection1 = DBContract.WorkoutEntry.COLUMN_DATE + " = "+"\'"+date+"\' ";
+
+
+                return new CursorLoader(mContext, DBContract.WorkoutEntry.CONTENT_URI,
+                        projection1, selection1, null, null);
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        switch(loader.getId()){
+            case 2:
+                String date = "";
+                if (cursor.moveToFirst()) {
+                    do {
+                        date = cursor.getString(cursor.getColumnIndex(DBContract.PlannerEntry.COLUMN_DATE));
+                    } while (cursor.moveToNext());
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString("date",date);
+                getLoaderManager().initLoader(3,bundle,this);
+                break;
+            case 3:
+                updateWorkouts(cursor);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
     }
 
     public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.ViewHolder>{

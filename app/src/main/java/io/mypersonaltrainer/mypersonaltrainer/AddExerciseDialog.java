@@ -35,7 +35,7 @@ public class AddExerciseDialog extends DialogFragment {
     ExpandableListView elv;
     int selGroup, selChild;
     ExercisesAdapter adapter;
-    String date;
+    String formattedDate;
 
 
 
@@ -52,7 +52,7 @@ public class AddExerciseDialog extends DialogFragment {
 
         Bundle bundle = getArguments();
         if(bundle!=null)
-            date = bundle.getString("date");
+            formattedDate = bundle.getString("date");
 
 
         elv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -102,9 +102,11 @@ public class AddExerciseDialog extends DialogFragment {
                                     ExerciseHolder.exerciseNames.get(selGroup)).get(selChild);
                             WorkoutFragment.currWorkout.addExercise(e);
                             WorkoutFragment.rvAdapter.notifyDataSetChanged();
-                            if(!isWorkoutExist()){
+                            String date = isWorkoutExist();
+                            if(date.equals("")){
 
                                 ContentValues cvWorkout = new ContentValues();
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_DATE, formattedDate);
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID,e.getId());
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, 0);
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_SETS, 3);
@@ -114,11 +116,20 @@ public class AddExerciseDialog extends DialogFragment {
 
                                 if(uri!=null){
                                     ContentValues cvPlanner = new ContentValues();
-                                    cvPlanner.put(DBContract.PlannerEntry.COLUMN_DATE, date);
+                                    cvPlanner.put(DBContract.PlannerEntry.COLUMN_DATE, formattedDate);
                                     cvPlanner.put(DBContract.PlannerEntry.COLUMN_WORKOUT_ID,uri.getLastPathSegment());
 
                                     getContext().getContentResolver().insert(DBContract.PlannerEntry.CONTENT_URI,cvPlanner);
                                 }
+                            }else{
+                                ContentValues cvWorkout = new ContentValues();
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_DATE, formattedDate);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID,e.getId());
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, 0);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_SETS, 3);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_REPS,10);
+
+                                getContext().getContentResolver().insert(DBContract.WorkoutEntry.CONTENT_URI, cvWorkout);
                             }
                             dialog.dismiss();
                         }
@@ -130,18 +141,25 @@ public class AddExerciseDialog extends DialogFragment {
         return dialog;
     }
 
-    public boolean isWorkoutExist(){
+    public String isWorkoutExist(){
 
-        String[] projection = { DBContract.PlannerEntry.COLUMN_DATE };
+        String[] projection = { DBContract.PlannerEntry.COLUMN_DATE,
+                DBContract.PlannerEntry.COLUMN_WORKOUT_ID };
         String selection = DBContract.PlannerEntry.COLUMN_DATE + " = ?";
-        String[] selectionArgs = {date};
+        String[] selectionArgs = {formattedDate};
 
         Cursor cursor = getContext().getContentResolver().query(DBContract.PlannerEntry.CONTENT_URI,
                 projection,
                 selection,
                 selectionArgs,
                 null,null);
-        return cursor.getCount()>0;
+        String result="";
+        if(cursor.getCount()>0){
+            cursor.moveToFirst();
+            result = cursor.getString(cursor
+                    .getColumnIndex(DBContract.PlannerEntry.COLUMN_DATE));
+        }
+        return result;
     }
 
 

@@ -22,7 +22,7 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //Define Users Table
         final String SQL_CREATE_USERS_TABLE = "CREATE TABLE " +
-                DBContract.UsersEntry.TABLE_NAME + " (" +
+                DBContract.UsersEntry.TABLE_NAME + " ( " +
                 DBContract.UsersEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 DBContract.UsersEntry.COLUMN_USER_NAME + " TEXT NOT NULL, " +
                 DBContract.UsersEntry.COLUMN_USER_GENDER + " TEXT NOT NULL, " +
@@ -33,16 +33,17 @@ public class PersonalFitnessDbHelper extends SQLiteOpenHelper {
 
         //define Planner Table
         final String SQL_CREATE_PLANNER_TABLE = "CREATE TABLE " +
-                DBContract.PlannerEntry.TABLE_NAME + " (" +
+                DBContract.PlannerEntry.TABLE_NAME + " ( " +
                 DBContract.PlannerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DBContract.PlannerEntry.COLUMN_DATE + " TEXT NOT NULL, " +
+                DBContract.PlannerEntry.COLUMN_DATE + " DATETIME NOT NULL, " +
                 DBContract.PlannerEntry.COLUMN_WORKOUT_ID + " INTEGER NOT NULL" +
                 ");";
 
         //define Workout Table
         final String SQL_CREATE_WORKOUT_TABLE = "CREATE TABLE " +
-                DBContract.WorkoutEntry.TABLE_NAME + " (" +
+                DBContract.WorkoutEntry.TABLE_NAME + " ( " +
                 DBContract.WorkoutEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                DBContract.WorkoutEntry.COLUMN_DATE + " DATETIME NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " INTEGER NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_WEIGHT + " INTEGER NOT NULL, " +
                 DBContract.WorkoutEntry.COLUMN_SETS + " INTEGER NOT NULL, " +

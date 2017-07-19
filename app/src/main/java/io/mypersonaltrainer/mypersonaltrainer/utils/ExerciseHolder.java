@@ -19,11 +19,13 @@ public class ExerciseHolder {
     public static ArrayList<String> exerciseNames;
     public ArrayList<Exercise> exerciseArrayList;
     public static Map<String, ArrayList<Exercise>> map;
+    public static Map<String, Exercise> table;
 
     public ExerciseHolder(String json){
         try {
             obj = new JSONObject(json);
             exerciseNames = new ArrayList<>();
+            table = new HashMap<>();
 
             map = new HashMap<>();
 
@@ -46,10 +48,12 @@ public class ExerciseHolder {
             exerciseNames.add(key);
             for(int i = 0 ; i < arr.length() ; i++){
                 JSONObject o = arr.getJSONObject(i);
-                exerciseArrayList.add(new Exercise(o.getString("id"),
+                Exercise e = new Exercise(o.getString("id"),
                         o.getString("name"),
                         o.getString("description"),
-                        o.getString("vidUrl")));
+                        o.getString("vidUrl"));
+                exerciseArrayList.add(e);
+                table.put(e.getId(),e);
             }
             map.put(key, exerciseArrayList);
         } catch (JSONException e) {

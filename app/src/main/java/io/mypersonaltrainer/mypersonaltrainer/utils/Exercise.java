@@ -13,9 +13,9 @@ public class Exercise implements Serializable {
     String exerciseInstruction;
     String vidUrl;
     int weight, sets, reps;
-    String muscleGroup;
+    String muscGroup;
 
-    public Exercise(String id,String exerciseName, String exerciseInstruction, String vidUrl){
+    public Exercise(String id,String exerciseName, String exerciseInstruction, String vidUrl, String muscGroup){
         this.id = id;
         this.exerciseName = exerciseName;
         this.exerciseInstruction = exerciseInstruction;
@@ -23,7 +23,7 @@ public class Exercise implements Serializable {
         this.weight = 0;
         this.sets = 3;
         this.reps = 10;
-        this.muscleGroup="";
+        this.muscGroup = muscGroup;
     }
 
     public String getId() {
@@ -40,5 +40,9 @@ public class Exercise implements Serializable {
 
     public String getVidUrl() {
         return vidUrl;
+    }
+
+    public String getMuscGroup() {
+        return muscGroup;
     }
 }

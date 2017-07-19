@@ -51,7 +51,8 @@ public class ExerciseHolder {
                 Exercise e = new Exercise(o.getString("id"),
                         o.getString("name"),
                         o.getString("description"),
-                        o.getString("vidUrl"));
+                        o.getString("vidUrl"),
+                        key);
                 exerciseArrayList.add(e);
                 table.put(e.getId(),e);
             }

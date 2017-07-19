@@ -2,14 +2,10 @@
     <string name="app_name">MyPersonalTrainer</string>
 
     <string name="login">Login</string>
-
-    <string name="mon">M</string>
-    <string name="tues">T</string>
-    <string name="wed">W</string>
-    <string name="thurs">Th</string>
-    <string name="fri">F</string>
-    <string name="sat">Sa</string>
-    <string name="sun">Su</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="are_u_sure">Delete this exercise?</string>
+    <string name="exercises">EXERCISES:</string>
 
     <string name="name">Name</string>
     <string name="gender">Gender</string>

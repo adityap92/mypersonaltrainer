@@ -16,10 +16,14 @@
             </intent-filter>
         </activity>
 
+        <service android:name=".widget.ListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
         <provider
             android:name=".data.FitnessContentProvider"
             android:authorities="io.mypersonaltrainer.mypersonaltrainer"
-            android:exported="false" />
+            android:grantUriPermissions="true"
+            android:exported="true" />
 
         <receiver android:name=".widget.ExerciseWidget">
             <intent-filter>

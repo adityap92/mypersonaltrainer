@@ -17,9 +17,19 @@
         </activity>
 
         <provider
-            android:authorities="io.mypersonaltrainer.mypersonaltrainer"
             android:name=".data.FitnessContentProvider"
-            android:exported="false"/>
+            android:authorities="io.mypersonaltrainer.mypersonaltrainer"
+            android:exported="false" />
+
+        <receiver android:name=".widget.ExerciseWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/exercise_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

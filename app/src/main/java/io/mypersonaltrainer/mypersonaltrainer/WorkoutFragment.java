@@ -1,6 +1,8 @@
 package io.mypersonaltrainer.mypersonaltrainer;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
+import io.mypersonaltrainer.mypersonaltrainer.utils.Exercise;
 import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
 import io.mypersonaltrainer.mypersonaltrainer.utils.Workout;
 
@@ -99,10 +102,11 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void updateWorkouts(Cursor cur){
-        Log.e("WHATS GOOD", DatabaseUtils.dumpCursorToString(cur));
+        Log.e("WORKOUT_TABLE - 2", DatabaseUtils.dumpCursorToString(cur));
         if(cur.moveToFirst()){
             do{
-                String index = cur.getString(cur.getColumnIndex(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID));
+                String index = cur.getString(cur.getColumnIndex(
+                        DBContract.WorkoutEntry.COLUMN_EXERCISE_ID));
                 currWorkout.addExercise(ExerciseHolder.table.get(index));
             }while(cur.moveToNext());
         }
@@ -125,7 +129,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                         DBContract.PlannerEntry.COLUMN_WORKOUT_ID
                 };
 
-                String selection = DBContract.PlannerEntry.COLUMN_DATE + "= "+"\'"+formattedDate + "\'";
+                String selection = DBContract.PlannerEntry.COLUMN_DATE +
+                        "= "+"\'"+formattedDate + "\'";
 
                 return new CursorLoader(mContext, DBContract.PlannerEntry.CONTENT_URI,
                         projection,
@@ -157,7 +162,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 String date = "";
                 if (cursor.moveToFirst()) {
                     do {
-                        date = cursor.getString(cursor.getColumnIndex(DBContract.PlannerEntry.COLUMN_DATE));
+                        date = cursor.getString(cursor.getColumnIndex(
+                                DBContract.PlannerEntry.COLUMN_DATE));
                     } while (cursor.moveToNext());
                 }
                 Bundle bundle = new Bundle();
@@ -195,6 +201,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
             NumberPicker npReps;
             @BindView(R.id.bMoreInfo)
             Button bMoreInfo;
+            @BindView(R.id.bDelete)
+            Button bDelete;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -222,8 +230,46 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             final int pos = position;
-            final View v = holder.itemView;
+
             holder.tvName.setText(thisWorkout.getExercises().get(position).getExerciseName());
+
+            holder.bDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Use the Builder class for convenient dialog construction
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(R.string.are_u_sure)
+                            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Exercise e = thisWorkout.getExercises().get(pos);
+                                    String selection = DBContract
+                                            .WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
+                                            + DBContract.WorkoutEntry.COLUMN_DATE + " = "
+                                            + "\'"+formattedDate + "\'";
+                                    String[] selectionArgs = {e.getId()};
+
+                                    int rows = mContext.getContentResolver().delete(
+                                           DBContract.WorkoutEntry.CONTENT_URI,
+                                           selection,
+                                           selectionArgs);
+                                    if(rows > 0){
+                                        currWorkout.getExercises().remove(pos);
+                                        rvAdapter.notifyDataSetChanged();
+                                    }
+
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel,
+                                    new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
+                }
+            });
 
             holder.bMoreInfo.setOnClickListener(new View.OnClickListener() {
                 @Override

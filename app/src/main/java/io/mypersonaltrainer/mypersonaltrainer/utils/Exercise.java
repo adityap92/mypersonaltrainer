@@ -45,4 +45,28 @@ public class Exercise implements Serializable {
     public String getMuscGroup() {
         return muscGroup;
     }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getSets() {
+        return sets;
+    }
+
+    public int getReps() {
+        return reps;
+    }
 }

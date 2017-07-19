@@ -1,10 +1,10 @@
 package io.mypersonaltrainer.mypersonaltrainer;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +14,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,12 +101,21 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void updateWorkouts(Cursor cur){
-        Log.e("WORKOUT_TABLE - 2", DatabaseUtils.dumpCursorToString(cur));
         if(cur.moveToFirst()){
             do{
                 String index = cur.getString(cur.getColumnIndex(
                         DBContract.WorkoutEntry.COLUMN_EXERCISE_ID));
-                currWorkout.addExercise(ExerciseHolder.table.get(index));
+                String weight = cur.getString(cur.getColumnIndex(
+                        DBContract.WorkoutEntry.COLUMN_WEIGHT));
+                String sets = cur.getString(cur.getColumnIndex(
+                        DBContract.WorkoutEntry.COLUMN_SETS));
+                String reps = cur.getString(cur.getColumnIndex(
+                        DBContract.WorkoutEntry.COLUMN_REPS));
+                Exercise e = ExerciseHolder.table.get(index);
+                e.setWeight(Integer.parseInt(weight));
+                e.setSets(Integer.parseInt(sets));
+                e.setReps(Integer.parseInt(reps));
+                currWorkout.addExercise(e);
             }while(cur.moveToNext());
         }
         rvAdapter.notifyDataSetChanged();
@@ -143,7 +151,10 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 }
                 String[] projection1 = {
                         DBContract.WorkoutEntry.COLUMN_DATE,
-                        DBContract.WorkoutEntry.COLUMN_EXERCISE_ID
+                        DBContract.WorkoutEntry.COLUMN_EXERCISE_ID,
+                        DBContract.WorkoutEntry.COLUMN_WEIGHT,
+                        DBContract.WorkoutEntry.COLUMN_SETS,
+                        DBContract.WorkoutEntry.COLUMN_REPS
                 };
 
                 String selection1 = DBContract.WorkoutEntry.COLUMN_DATE + " = "+"\'"+date+"\' ";
@@ -212,11 +223,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 npWeight.setMaxValue(200);
                 npSets.setMinValue(0);
                 npSets.setMaxValue(5);
-                npSets.setValue(3);
                 npReps.setMinValue(0);
                 npReps.setMaxValue(50);
-                npReps.setValue(10);
-
             }
         }
 
@@ -231,7 +239,9 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         public void onBindViewHolder(ViewHolder holder, int position) {
             final int pos = position;
 
-            holder.tvName.setText(thisWorkout.getExercises().get(position).getExerciseName());
+            final Exercise e = thisWorkout.getExercises().get(position);
+
+            holder.tvName.setText(e.getExerciseName());
 
             holder.bDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -241,7 +251,6 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                     builder.setMessage(R.string.are_u_sure)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    Exercise e = thisWorkout.getExercises().get(pos);
                                     String selection = DBContract
                                             .WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
                                             + DBContract.WorkoutEntry.COLUMN_DATE + " = "
@@ -276,7 +285,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 public void onClick(View view) {
                     ExerciseDetailFragment detailFragment = new ExerciseDetailFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("exercise", thisWorkout.getExercises().get(pos));
+                    bundle.putSerializable("exercise", e);
                     detailFragment.setArguments(bundle);
                     //replace fragment
                     FragmentManager fragmentManager = getFragmentManager();
@@ -284,6 +293,57 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                             .replace(R.id.container, detailFragment)
                             .addToBackStack(null)
                             .commit();
+                }
+            });
+
+            holder.npWeight.setValue(e.getWeight());
+            holder.npWeight.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, newVal);
+
+                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? ";
+                    String[] selectionArgs = {e.getId()};
+                    mContext.getContentResolver().update(DBContract.WorkoutEntry.CONTENT_URI,
+                            cv,
+                            selection,
+                            selectionArgs
+                            );
+                }
+            });
+
+            holder.npSets.setValue(e.getSets());
+            holder.npSets.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DBContract.WorkoutEntry.COLUMN_SETS, newVal);
+
+                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? ";
+                    String[] selectionArgs = {e.getId()};
+                    mContext.getContentResolver().update(DBContract.WorkoutEntry.CONTENT_URI,
+                            cv,
+                            selection,
+                            selectionArgs
+                    );
+                }
+            });
+
+            holder.npReps.setValue(e.getReps());
+            holder.npReps.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                @Override
+                public void onValueChange(NumberPicker numberPicker, int oldVal, int newVal) {
+                    ContentValues cv = new ContentValues();
+                    cv.put(DBContract.WorkoutEntry.COLUMN_REPS, newVal);
+
+                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? ";
+                    String[] selectionArgs = {e.getId()};
+                    mContext.getContentResolver().update(DBContract.WorkoutEntry.CONTENT_URI,
+                            cv,
+                            selection,
+                            selectionArgs
+                    );
                 }
             });
         }

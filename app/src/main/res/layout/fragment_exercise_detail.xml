@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
     <fragment
         android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
@@ -19,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvInstructionsDetail"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:textColor="@android:color/black"/>
+        android:layout_marginStart="@dimen/activity_horizontal_margin" />
 
 </LinearLayout>
+</ScrollView>

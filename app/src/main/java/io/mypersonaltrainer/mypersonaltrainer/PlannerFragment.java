@@ -50,6 +50,8 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     ArrayList<String> arrListWeek;
     //static ArrayList<Planner> plannerArr;
     static PlannerArrayAdapter adapter;
+    boolean isTablet;
+    int tabletPos;
 
     public PlannerFragment(){}
 
@@ -70,37 +72,73 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         final int posInWeek = arr.indexOf(dayOfTheWeek);
 
         setupDateArr(posInWeek);
+        isTablet = getResources().getBoolean(R.bool.isTablet);
 
         LoaderManager manager = getLoaderManager();
         Bundle bManager = new Bundle();
         bManager.putInt("pos",posInWeek);
         manager.initLoader(0, bManager, this);
-        ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         adapter = new PlannerArrayAdapter(mContext,
                 R.layout.planner_view, retPlan(), posInWeek);
-
         lvWeekDays.setAdapter(adapter);
-        lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                int diff = pos - posInWeek;
-                Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DATE, diff);
+        ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+        if(!isTablet){
 
-                WorkoutFragment workoutFragment = new WorkoutFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("date", new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
-                workoutFragment.setArguments(bundle);
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, workoutFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
+            lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                    int diff = pos - posInWeek;
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.DATE, diff);
 
+                    WorkoutFragment workoutFragment = new WorkoutFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("date", new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                    workoutFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, workoutFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+        }else{
+            tabletPos = posInWeek;
+            WorkoutFragment workoutFragment = new WorkoutFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("date", new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()));
+            workoutFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.workout_container, workoutFragment)
+                    .commit();
+
+            lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                    tabletPos = pos;
+                    int diff = pos - posInWeek;
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.DATE, diff);
+
+                    WorkoutFragment workoutFragment = new WorkoutFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("date", new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
+                    workoutFragment.setArguments(bundle);
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.workout_container, workoutFragment)
+                            .addToBackStack(null)
+                            .commit();
+                    getLoaderManager().destroyLoader(0);
+                    getLoaderManager().destroyLoader(1);
+                    startLoader();
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
         return view;
     }
 
@@ -302,17 +340,23 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
             TextView weekday = (TextView) row.findViewById(R.id.tvWeekDayPlanner);
             TextView muscGroup = (TextView) row.findViewById(R.id.tvGroupPlanner);
 
-            if(position == p){
-                row.setBackgroundResource(R.color.colorAccent);
-            }else
-                row.setBackgroundResource(android.R.color.white);
-
-
             if(plan.get(position)!=null){
                 weekday.setText(plan.get(position).getWeekday());
                 muscGroup.setText(plan.get(position).getMuscGroup());
             }
 
+            if(!isTablet){
+                if(position == p){
+                    row.setBackgroundResource(R.color.colorAccent);
+                }else
+                    row.setBackgroundResource(android.R.color.white);
+
+            }else{
+                if(position == tabletPos){
+                    row.setBackgroundResource(R.color.colorAccent);
+                }else
+                    row.setBackgroundResource(android.R.color.white);
+            }
 
             return row;
         }

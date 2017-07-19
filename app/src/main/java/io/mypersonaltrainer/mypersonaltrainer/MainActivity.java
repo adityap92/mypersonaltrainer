@@ -2,6 +2,7 @@ package io.mypersonaltrainer.mypersonaltrainer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
             loginFragment = new LoginFragment();
             openFragment(loginFragment);
         }
+        //force landscape if tablet
+        if(getResources().getBoolean(R.bool.isTablet)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -96,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
             case android.R.id.home:
                 onBackPressed();
+                if(getResources().getBoolean(R.bool.isTablet)){
+                   getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
                 return true;
             //action when sign out is selected from menu
             case R.id.menu_sign_out:
@@ -127,24 +135,17 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             InputStream is = getAssets().open("exercises.json");
-
             int size = is.available();
-
             byte[] buffer = new byte[size];
-
             is.read(buffer);
-
             is.close();
-
             json = new String(buffer, "UTF-8");
-
 
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
         }
         return json;
-
     }
 
     public static class LoginFragment extends Fragment{
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     signIn();
                 }
             });
+            ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
             return rootView;
         }

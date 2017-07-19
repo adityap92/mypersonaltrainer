@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -68,13 +69,24 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
         currWorkout = new Workout();
 
-        ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         getLoaderManager().initLoader(2,null,this);
 
-        rvLayoutManager = new LinearLayoutManager(mContext);
-        rvAdapter = new ExercisesAdapter(currWorkout);
-        rvExercises.setLayoutManager(rvLayoutManager);
-        rvExercises.setAdapter(rvAdapter);
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        if(!isTablet){
+            ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            rvLayoutManager = new LinearLayoutManager(mContext);
+            rvAdapter = new ExercisesAdapter(currWorkout);
+            rvExercises.setLayoutManager(rvLayoutManager);
+            rvExercises.setAdapter(rvAdapter);
+        }else{
+            rvLayoutManager = new GridLayoutManager(mContext,2);
+            rvAdapter = new ExercisesAdapter(currWorkout);
+            rvExercises.setLayoutManager(rvLayoutManager);
+            rvExercises.setAdapter(rvAdapter);
+        }
+
+
 
         fbAddExercise.setOnClickListener(new View.OnClickListener() {
             @Override

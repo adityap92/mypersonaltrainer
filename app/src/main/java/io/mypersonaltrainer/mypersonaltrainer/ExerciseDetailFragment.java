@@ -1,5 +1,6 @@
 package io.mypersonaltrainer.mypersonaltrainer;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -39,12 +40,12 @@ public class ExerciseDetailFragment extends Fragment {
         if(bundle!=null){
             currExercise = (Exercise) bundle.getSerializable("exercise");
         }
-
+        ((MainActivity) getContext()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tvInstructionsDetail.setText(currExercise.getExerciseInstruction());
 
         youtubeFragment = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
 
-        if(!currExercise.equals("")) {
+        if(!currExercise.getVidUrl().equals("")) {
 
             youtubeFragment.initialize(getString(R.string.yt_api_key), new YouTubePlayer.OnInitializedListener() {
                 @Override
@@ -54,15 +55,20 @@ public class ExerciseDetailFragment extends Fragment {
                         youTubePlayer.cueVideo(currExercise.getVidUrl());
                         youTubePlayer.play();
                     }
-
                 }
 
                 @Override
                 public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
                     Log.d("YOUTUBEPLAYER FRAG", "FAILURE");
-                    Snackbar mySnackbar = Snackbar.make(view,
-                            getString(R.string.yt_fail), Snackbar.LENGTH_SHORT);
-                    mySnackbar.show();
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.yt_fail),
+                            Snackbar.LENGTH_LONG);
+                    int snackbarTextId = android.support.design.R.id.snackbar_text;
+                    View view = snackbar.getView();
+                    TextView textView = (TextView) view.findViewById(snackbarTextId);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        textView.setTextColor(getResources().getColor(R.color.white, null));
+                    }
+                    snackbar.show();
                 }
             });
         }else{

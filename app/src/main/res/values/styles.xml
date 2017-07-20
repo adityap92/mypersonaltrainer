@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="menu_colorNormal">@color/colorAccent</item>
         <item name="android:textColor">@android:color/black</item>
+        <item name="android:windowExitTransition">@transition/slide</item>
     </style>
 
     <style name="MenuButtonsStyle" parent="Theme.AppCompat">

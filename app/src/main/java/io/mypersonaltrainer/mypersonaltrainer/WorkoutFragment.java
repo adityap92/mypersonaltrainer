@@ -161,6 +161,17 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
             }while(cur.moveToNext());
         }
         rvAdapter.notifyDataSetChanged();
+        if(currWorkout.getExercises().size()==0){
+            Snackbar snackbar = Snackbar.make(getView(), getString(R.string.add_workout),
+                    Snackbar.LENGTH_LONG);
+            int snackbarTextId = android.support.design.R.id.snackbar_text;
+            View v = snackbar.getView();
+            TextView textView = (TextView) v.findViewById(snackbarTextId);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                textView.setTextColor(getResources().getColor(R.color.white, null));
+            }
+            snackbar.show();
+        }
     }
 
     @Override

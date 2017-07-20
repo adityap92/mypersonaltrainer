@@ -155,13 +155,13 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     //create empty array for adapter
     public ArrayList<Planner> retPlan() {
         ArrayList<Planner> plannerArr = new ArrayList<>();
-        plannerArr.add(new Planner("Sunday", ""));
-        plannerArr.add(new Planner("Monday", ""));
-        plannerArr.add(new Planner("Tuesday", ""));
-        plannerArr.add(new Planner("Wednesday", ""));
-        plannerArr.add(new Planner("Thursday", ""));
-        plannerArr.add(new Planner("Friday", ""));
-        plannerArr.add(new Planner("Saturday", ""));
+        plannerArr.add(new Planner(getString(R.string.sunday), ""));
+        plannerArr.add(new Planner(getString(R.string.monday), ""));
+        plannerArr.add(new Planner(getString(R.string.tuesday), ""));
+        plannerArr.add(new Planner(getString(R.string.wednesday), ""));
+        plannerArr.add(new Planner(getString(R.string.thursday), ""));
+        plannerArr.add(new Planner(getString(R.string.friday), ""));
+        plannerArr.add(new Planner(getString(R.string.saturday), ""));
         return plannerArr;
     }
 

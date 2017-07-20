@@ -43,5 +43,12 @@
     <string name="card_sets">Sets</string>
     <string name="card_reps">Reps</string>
     <string name="plot_exercise">Plot Exercises</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
 
 </resources>

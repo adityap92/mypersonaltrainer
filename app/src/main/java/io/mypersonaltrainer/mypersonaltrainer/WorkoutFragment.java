@@ -114,7 +114,9 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 if (currWorkout.getExercises().size() > 0) {
                     String share = "";
                     for (Exercise e : currWorkout.getExercises()) {
-                        share += e.getExerciseName() + " Sets: " + e.getSets() + " Reps: " + e.getReps() + "\n";
+                        share += e.getExerciseName() + " " + getString(R.string.sets) + " " +
+                                e.getSets() + " " + getString(R.string.reps) + " " +
+                                e.getReps() + "\n";
                     }
                     Intent shareIntent = new PlusShare.Builder(mContext)
                             .setType("text/plain")

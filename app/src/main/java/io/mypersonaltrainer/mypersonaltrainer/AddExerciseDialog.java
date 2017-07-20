@@ -70,12 +70,12 @@ public class AddExerciseDialog extends DialogFragment {
         final AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setView(elv)
                 .setTitle(getString(R.string.dialog_name))
-                .setPositiveButton("Add Exercise", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.add_exercise), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dismiss();

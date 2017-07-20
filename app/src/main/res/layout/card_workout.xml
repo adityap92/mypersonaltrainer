@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="200dp">
 
     <android.support.v7.widget.CardView
@@ -22,7 +23,7 @@
             android:textAppearance="@android:style/TextAppearance.Medium"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:contentDescription="@string/exercise_name"/>
+            android:contentDescription="@string/exercise_name" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,43 +31,51 @@
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Weight"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="@string/weight"/>
+                android:contentDescription="@string/weight" />
+
             <NumberPicker
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/npWeight"
-                android:contentDescription="@string/weight"/>
+                android:contentDescription="@string/weight" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sets"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="@string/sets"/>
+                android:contentDescription="@string/sets" />
+
             <NumberPicker
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/npSets"
-                android:contentDescription="@string/sets"/>
+                android:contentDescription="@string/sets" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reps"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="@string/reps"/>
+                android:contentDescription="@string/reps" />
+
             <NumberPicker
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/npReps"
-                android:contentDescription="@string/reps"/>
+                android:contentDescription="@string/reps" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <Button
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -74,7 +83,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/ic_close_black_24dp"
-                    android:contentDescription="@string/delete"/>
+                    android:contentDescription="@string/delete" />
+
                 <Button
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -82,7 +92,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/ic_info_outline_black_24dp"
-                    android:contentDescription="@string/more_info"/>
+                    android:contentDescription="@string/more_info" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

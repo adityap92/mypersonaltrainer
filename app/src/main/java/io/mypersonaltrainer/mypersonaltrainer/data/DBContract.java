@@ -43,7 +43,7 @@ public class DBContract {
     }
 
     //define Workout Table values
-    public static final class WorkoutEntry implements BaseColumns{
+    public static final class WorkoutEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_WORKOUT).build();

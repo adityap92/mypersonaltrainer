@@ -18,7 +18,7 @@ public class Exercise implements Serializable {
     String muscGroup;
 
     //constructor
-    public Exercise(String id,String exerciseName, String exerciseInstruction, String vidUrl, String muscGroup){
+    public Exercise(String id, String exerciseName, String exerciseInstruction, String vidUrl, String muscGroup) {
         this.id = id;
         this.exerciseName = exerciseName;
         this.exerciseInstruction = exerciseInstruction;

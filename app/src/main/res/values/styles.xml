@@ -16,10 +16,10 @@
         <item name="fab_colorPressed">@color/colorAccent</item>
         <item name="menu_colorNormal">@color/colorAccent</item>
         <item name="menu_colorPressed">@color/colorAccent</item>
-        </style>
+    </style>
 
     <style name="NumberPickerText">
-        <item name = "android:textSize">30sp</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
 </resources>

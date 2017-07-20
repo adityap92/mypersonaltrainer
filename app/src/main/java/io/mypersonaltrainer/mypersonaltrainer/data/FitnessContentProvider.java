@@ -25,14 +25,14 @@ public class FitnessContentProvider extends ContentProvider {
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    public static UriMatcher buildUriMatcher(){
+    public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         //add matches
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_USERS, USERS);
-        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_USERS +"/#", USERS);
+        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_USERS + "/#", USERS);
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_PLANNER, PLANNER);
-        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_PLANNER +"/#", PLANNER);
+        uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_PLANNER + "/#", PLANNER);
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_WORKOUT, WORKOUT);
         uriMatcher.addURI(DBContract.AUTHORITY, DBContract.PATH_WORKOUT + "/#", WORKOUT);
 
@@ -55,7 +55,7 @@ public class FitnessContentProvider extends ContentProvider {
         //returned cursor with query results
         Cursor retCursor;
 
-        switch(match){
+        switch (match) {
             case USERS:
                 retCursor = db.query(DBContract.UsersEntry.TABLE_NAME,
                         projection,
@@ -95,7 +95,9 @@ public class FitnessContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public String getType(@NonNull Uri uri) { return null; }
+    public String getType(@NonNull Uri uri) {
+        return null;
+    }
 
     @Nullable
     @Override
@@ -107,25 +109,25 @@ public class FitnessContentProvider extends ContentProvider {
         //return uri of inserted row
         Uri returnUri;
 
-        switch(match){
+        switch (match) {
             case USERS:
                 long id = db.insert(DBContract.UsersEntry.TABLE_NAME, null, contentValues);
 
-                if(id > 0)
+                if (id > 0)
                     returnUri = ContentUris.withAppendedId(DBContract.UsersEntry.CONTENT_URI, id);
                 else
                     throw new android.database.SQLException("Failed to insert row into: " + uri);
                 break;
             case PLANNER:
                 long id1 = db.insert(DBContract.PlannerEntry.TABLE_NAME, null, contentValues);
-                if(id1 > 0)
+                if (id1 > 0)
                     returnUri = ContentUris.withAppendedId(DBContract.PlannerEntry.CONTENT_URI, id1);
                 else
                     throw new android.database.SQLException("Failed to insert row into: " + uri);
                 break;
             case WORKOUT:
                 long id2 = db.insert(DBContract.WorkoutEntry.TABLE_NAME, null, contentValues);
-                if(id2 > 0)
+                if (id2 > 0)
                     returnUri = ContentUris.withAppendedId(DBContract.WorkoutEntry.CONTENT_URI, id2);
                 else
                     throw new android.database.SQLException("Failed to insert row into: " + uri);
@@ -143,7 +145,7 @@ public class FitnessContentProvider extends ContentProvider {
         int rowsDeleted = 0;
 
         int match = sUriMatcher.match(uri);
-        switch(match){
+        switch (match) {
             case WORKOUT:
                 rowsDeleted = db.delete(DBContract.WorkoutEntry.TABLE_NAME,
                         selection,
@@ -162,7 +164,7 @@ public class FitnessContentProvider extends ContentProvider {
         int count = -1;
 
         int match = sUriMatcher.match(uri);
-        switch(match){
+        switch (match) {
             case WORKOUT:
                 count = db.update(DBContract.WorkoutEntry.TABLE_NAME,
                         contentValues,

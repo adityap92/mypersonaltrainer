@@ -12,12 +12,12 @@ public class Workout {
     ArrayList<Exercise> exercises;
 
     //constructor
-    public Workout(){
+    public Workout() {
         this.exercises = new ArrayList<Exercise>();
     }
 
     //add exercises to workout object
-    public void addExercise(Exercise newExercise){
+    public void addExercise(Exercise newExercise) {
         this.exercises.add(newExercise);
     }
 

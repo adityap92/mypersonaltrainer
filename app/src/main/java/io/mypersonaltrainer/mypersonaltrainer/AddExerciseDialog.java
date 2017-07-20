@@ -40,7 +40,6 @@ public class AddExerciseDialog extends DialogFragment {
     String formattedDate;
 
 
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -49,11 +48,11 @@ public class AddExerciseDialog extends DialogFragment {
         }
         adapter = new ExercisesAdapter();
         elv.setAdapter(adapter);
-        selGroup =-1;
-        selChild=-1;
+        selGroup = -1;
+        selChild = -1;
 
         Bundle bundle = getArguments();
-        if(bundle!=null)
+        if (bundle != null)
             formattedDate = bundle.getString("date");
 
         //get position of exercise
@@ -88,11 +87,11 @@ public class AddExerciseDialog extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
-                        button.setOnClickListener(new View.OnClickListener() {
+                button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //if no exercise was selected
-                        if(selGroup==-1||selChild==-1){
+                        if (selGroup == -1 || selChild == -1) {
                             Snackbar snackbar = Snackbar.make(view, getString(R.string.select_workout),
                                     Snackbar.LENGTH_SHORT);
                             int snackbarTextId = android.support.design.R.id.snackbar_text;
@@ -102,40 +101,40 @@ public class AddExerciseDialog extends DialogFragment {
                                 textView.setTextColor(getResources().getColor(R.color.white, null));
                             }
                             snackbar.show();
-                        }else{
+                        } else {
                             Exercise e = ExerciseHolder.map.get(
                                     ExerciseHolder.exerciseNames.get(selGroup)).get(selChild);
                             WorkoutFragment.currWorkout.addExercise(e);
                             WorkoutFragment.rvAdapter.notifyDataSetChanged();
                             String date = isWorkoutExist();
                             //if no workout exists for this day
-                            if(date.equals("")){
+                            if (date.equals("")) {
                                 //create content value for Workout Table
                                 ContentValues cvWorkout = new ContentValues();
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_DATE, formattedDate);
-                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID,e.getId());
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID, e.getId());
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, 0);
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_SETS, 3);
-                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_REPS,10);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_REPS, 10);
                                 //create workout entry before inserting into Planner table
                                 Uri uri = getContext().getContentResolver().insert(DBContract.WorkoutEntry.CONTENT_URI, cvWorkout);
 
                                 //if inert into workout table is successful
-                                if(uri!=null){
+                                if (uri != null) {
                                     ContentValues cvPlanner = new ContentValues();
                                     cvPlanner.put(DBContract.PlannerEntry.COLUMN_DATE, formattedDate);
-                                    cvPlanner.put(DBContract.PlannerEntry.COLUMN_WORKOUT_ID,uri.getLastPathSegment());
+                                    cvPlanner.put(DBContract.PlannerEntry.COLUMN_WORKOUT_ID, uri.getLastPathSegment());
 
-                                    getContext().getContentResolver().insert(DBContract.PlannerEntry.CONTENT_URI,cvPlanner);
+                                    getContext().getContentResolver().insert(DBContract.PlannerEntry.CONTENT_URI, cvPlanner);
                                 }
-                            }else{
+                            } else {
                                 //workout for this day does exist
                                 ContentValues cvWorkout = new ContentValues();
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_DATE, formattedDate);
-                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID,e.getId());
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID, e.getId());
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, 0);
                                 cvWorkout.put(DBContract.WorkoutEntry.COLUMN_SETS, 3);
-                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_REPS,10);
+                                cvWorkout.put(DBContract.WorkoutEntry.COLUMN_REPS, 10);
 
                                 //insert into workout table
                                 getContext().getContentResolver().insert(DBContract.WorkoutEntry.CONTENT_URI, cvWorkout);
@@ -151,10 +150,10 @@ public class AddExerciseDialog extends DialogFragment {
     }
 
     //check if workout for this day exists
-    public String isWorkoutExist(){
+    public String isWorkoutExist() {
 
-        String[] projection = { DBContract.PlannerEntry.COLUMN_DATE,
-                DBContract.PlannerEntry.COLUMN_WORKOUT_ID };
+        String[] projection = {DBContract.PlannerEntry.COLUMN_DATE,
+                DBContract.PlannerEntry.COLUMN_WORKOUT_ID};
         String selection = DBContract.PlannerEntry.COLUMN_DATE + " = ?";
         String[] selectionArgs = {formattedDate};
 
@@ -162,9 +161,9 @@ public class AddExerciseDialog extends DialogFragment {
                 projection,
                 selection,
                 selectionArgs,
-                null,null);
-        String result="";
-        if(cursor.getCount()>0){
+                null, null);
+        String result = "";
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             result = cursor.getString(cursor
                     .getColumnIndex(DBContract.PlannerEntry.COLUMN_DATE));
@@ -174,7 +173,7 @@ public class AddExerciseDialog extends DialogFragment {
 
 
     //adapter for displaying new exercises
-    public class ExercisesAdapter extends BaseExpandableListAdapter{
+    public class ExercisesAdapter extends BaseExpandableListAdapter {
 
         @Override
         public int getGroupCount() {
@@ -213,7 +212,7 @@ public class AddExerciseDialog extends DialogFragment {
 
         @Override
         public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
-            if(view==null){
+            if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.group_exercise, null);
@@ -227,7 +226,7 @@ public class AddExerciseDialog extends DialogFragment {
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean b, View view, ViewGroup viewGroup) {
-            if(view==null){
+            if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) getContext()
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflater.inflate(R.layout.child_exercise, null);
@@ -236,11 +235,11 @@ public class AddExerciseDialog extends DialogFragment {
             TextView tv = (TextView) view.findViewById(R.id.tvChildExercise);
             tv.setText(map.get(ExerciseHolder.exerciseNames.get(groupPosition)).get(childPosition).getExerciseName());
 
-            if(groupPosition == selGroup && childPosition == selChild) {
+            if (groupPosition == selGroup && childPosition == selChild) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     view.setBackgroundColor(getResources().getColor(R.color.colorAccent, null));
                 }
-            }else {
+            } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     view.setBackgroundColor(getResources().getColor(R.color.white, null));
                 }

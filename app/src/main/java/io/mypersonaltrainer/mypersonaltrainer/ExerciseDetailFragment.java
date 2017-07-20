@@ -38,7 +38,7 @@ public class ExerciseDetailFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         Bundle bundle = this.getArguments();
-        if(bundle!=null){
+        if (bundle != null) {
             currExercise = (Exercise) bundle.getSerializable("exercise");
         }
         //navigate back to previous fragment
@@ -49,7 +49,7 @@ public class ExerciseDetailFragment extends Fragment {
         youtubeFragment = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
 
         //check if video id provided
-        if(!currExercise.getVidUrl().equals("")) {
+        if (!currExercise.getVidUrl().equals("")) {
 
             //initialize with api key
             youtubeFragment.initialize(getString(R.string.yt_api_key), new YouTubePlayer.OnInitializedListener() {

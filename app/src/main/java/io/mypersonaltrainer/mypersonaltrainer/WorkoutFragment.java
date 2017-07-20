@@ -41,7 +41,7 @@ import io.mypersonaltrainer.mypersonaltrainer.utils.Workout;
  * Created by aditya on 7/10/17.
  */
 
-public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Unbinder unbinder;
     @BindView(R.id.rvExercises)
@@ -58,7 +58,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     public static Workout currWorkout;
     String formattedDate;
 
-    public WorkoutFragment(){}
+    public WorkoutFragment() {
+    }
 
     @Nullable
     @Override
@@ -69,26 +70,26 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
         //get date passed from planner fragment
         Bundle bundle = getArguments();
-        if(bundle!=null)
+        if (bundle != null)
             formattedDate = bundle.getString("date");
 
         //initialize workout
         currWorkout = new Workout();
 
         //start loader for exercise data
-        getLoaderManager().initLoader(2,null,this);
+        getLoaderManager().initLoader(2, null, this);
 
         //check if tablet or phone
         boolean isTablet = getResources().getBoolean(R.bool.isTablet);
-        if(!isTablet){
+        if (!isTablet) {
             ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             rvLayoutManager = new LinearLayoutManager(mContext);
             rvAdapter = new ExercisesAdapter(currWorkout);
             rvExercises.setLayoutManager(rvLayoutManager);
             rvExercises.setAdapter(rvAdapter);
-        }else{
+        } else {
             //load grid layout if tablet
-            rvLayoutManager = new GridLayoutManager(mContext,2);
+            rvLayoutManager = new GridLayoutManager(mContext, 2);
             rvAdapter = new ExercisesAdapter(currWorkout);
             rvExercises.setLayoutManager(rvLayoutManager);
             rvExercises.setAdapter(rvAdapter);
@@ -102,7 +103,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 Bundle b = new Bundle();
                 b.putString("date", formattedDate);
                 dialog.setArguments(b);
-                dialog.show(getFragmentManager(),"dialog");
+                dialog.show(getFragmentManager(), "dialog");
             }
         });
 
@@ -110,17 +111,17 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         fbShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currWorkout.getExercises().size()>0){
-                    String share="";
-                    for(Exercise e : currWorkout.getExercises()){
-                        share+=e.getExerciseName() + " Sets: "+e.getSets() + " Reps: " + e.getReps() +"\n";
+                if (currWorkout.getExercises().size() > 0) {
+                    String share = "";
+                    for (Exercise e : currWorkout.getExercises()) {
+                        share += e.getExerciseName() + " Sets: " + e.getSets() + " Reps: " + e.getReps() + "\n";
                     }
                     Intent shareIntent = new PlusShare.Builder(mContext)
                             .setType("text/plain")
                             .setText(share)
                             .getIntent();
-                    startActivityForResult(shareIntent,0);
-                }else{
+                    startActivityForResult(shareIntent, 0);
+                } else {
                     Snackbar snackbar = Snackbar.make(getView(), getString(R.string.add_workout),
                             Snackbar.LENGTH_LONG);
                     int snackbarTextId = android.support.design.R.id.snackbar_text;
@@ -141,10 +142,10 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     //update UI once cursor is returned
-    public void updateWorkouts(Cursor cur){
+    public void updateWorkouts(Cursor cur) {
         currWorkout.getExercises().clear();
-        if(cur.moveToFirst()){
-            do{
+        if (cur.moveToFirst()) {
+            do {
                 String index = cur.getString(cur.getColumnIndex(
                         DBContract.WorkoutEntry.COLUMN_EXERCISE_ID));
                 String weight = cur.getString(cur.getColumnIndex(
@@ -158,10 +159,10 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 e.setSets(Integer.parseInt(sets));
                 e.setReps(Integer.parseInt(reps));
                 currWorkout.addExercise(e);
-            }while(cur.moveToNext());
+            } while (cur.moveToNext());
         }
         rvAdapter.notifyDataSetChanged();
-        if(currWorkout.getExercises().size()==0){
+        if (currWorkout.getExercises().size() == 0) {
             Snackbar snackbar = Snackbar.make(getView(), getString(R.string.add_workout),
                     Snackbar.LENGTH_LONG);
             int snackbarTextId = android.support.design.R.id.snackbar_text;
@@ -184,7 +185,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         //load workout ID from Planner Table
-        switch(id){
+        switch (id) {
             case 2:
                 String[] projection = {
                         DBContract.PlannerEntry.COLUMN_DATE,
@@ -192,7 +193,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 };
 
                 String selection = DBContract.PlannerEntry.COLUMN_DATE +
-                        "= "+"\'"+formattedDate + "\'";
+                        "= " + "\'" + formattedDate + "\'";
 
                 return new CursorLoader(mContext, DBContract.PlannerEntry.CONTENT_URI,
                         projection,
@@ -200,8 +201,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                         null, null);
             //load exercise IDs from Workout Table
             case 3:
-                String date="";
-                if(args!=null){
+                String date = "";
+                if (args != null) {
                     date = args.getString("date");
                 }
                 String[] projection1 = {
@@ -212,7 +213,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                         DBContract.WorkoutEntry.COLUMN_REPS
                 };
 
-                String selection1 = DBContract.WorkoutEntry.COLUMN_DATE + " = "+"\'"+date+"\' ";
+                String selection1 = DBContract.WorkoutEntry.COLUMN_DATE + " = " + "\'" + date + "\' ";
 
 
                 return new CursorLoader(mContext, DBContract.WorkoutEntry.CONTENT_URI,
@@ -224,7 +225,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         //handle cursor return
-        switch(loader.getId()){
+        switch (loader.getId()) {
             case 2:
                 String date = "";
                 if (cursor.moveToFirst()) {
@@ -234,8 +235,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                     } while (cursor.moveToNext());
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString("date",date);
-                getLoaderManager().initLoader(3,bundle,this);
+                bundle.putString("date", date);
+                getLoaderManager().initLoader(3, bundle, this);
                 break;
             case 3:
                 updateWorkouts(cursor);
@@ -248,15 +249,15 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
     }
 
-    public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.ViewHolder>{
+    public class ExercisesAdapter extends RecyclerView.Adapter<ExercisesAdapter.ViewHolder> {
 
         Workout thisWorkout;
 
-        public ExercisesAdapter(Workout workout){
+        public ExercisesAdapter(Workout workout) {
             this.thisWorkout = workout;
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             @BindView(R.id.tvWorkoutCard)
             TextView tvName;
@@ -273,7 +274,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                ButterKnife.bind(this,itemView);
+                ButterKnife.bind(this, itemView);
                 //setup number pickers
                 npWeight.setMinValue(0);
                 npWeight.setMaxValue(200);
@@ -312,14 +313,14 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                                     String selection = DBContract
                                             .WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
                                             + DBContract.WorkoutEntry.COLUMN_DATE + " = "
-                                            + "\'"+formattedDate + "\'";
+                                            + "\'" + formattedDate + "\'";
                                     String[] selectionArgs = {e.getId()};
 
                                     int rows = mContext.getContentResolver().delete(
-                                           DBContract.WorkoutEntry.CONTENT_URI,
-                                           selection,
-                                           selectionArgs);
-                                    if(rows > 0){
+                                            DBContract.WorkoutEntry.CONTENT_URI,
+                                            selection,
+                                            selectionArgs);
+                                    if (rows > 0) {
                                         //check that rows were actually deleted
                                         currWorkout.getExercises().remove(pos);
                                         rvAdapter.notifyDataSetChanged();
@@ -329,10 +330,10 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                             })
                             .setNegativeButton(R.string.cancel,
                                     new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                                        public void onClick(DialogInterface dialog, int id) {
 
-                                }
-                            });
+                                        }
+                                    });
                     // Create the AlertDialog object and return it
                     builder.create();
                     builder.show();
@@ -364,13 +365,14 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                     ContentValues cv = new ContentValues();
                     cv.put(DBContract.WorkoutEntry.COLUMN_WEIGHT, newVal);
 
-                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? ";
+                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
+                            + DBContract.WorkoutEntry.COLUMN_DATE + " = \'" + formattedDate + "\'";
                     String[] selectionArgs = {e.getId()};
                     mContext.getContentResolver().update(DBContract.WorkoutEntry.CONTENT_URI,
                             cv,
                             selection,
                             selectionArgs
-                            );
+                    );
                 }
             });
 
@@ -381,7 +383,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                     ContentValues cv = new ContentValues();
                     cv.put(DBContract.WorkoutEntry.COLUMN_SETS, newVal);
 
-                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? ";
+                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
+                            + DBContract.WorkoutEntry.COLUMN_DATE + " = \'" + formattedDate + "\'";
                     String[] selectionArgs = {e.getId()};
                     mContext.getContentResolver().update(DBContract.WorkoutEntry.CONTENT_URI,
                             cv,
@@ -398,7 +401,8 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                     ContentValues cv = new ContentValues();
                     cv.put(DBContract.WorkoutEntry.COLUMN_REPS, newVal);
 
-                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? ";
+                    String selection = DBContract.WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
+                            + DBContract.WorkoutEntry.COLUMN_DATE + " = \'" + formattedDate + "\'";
                     String[] selectionArgs = {e.getId()};
                     mContext.getContentResolver().update(DBContract.WorkoutEntry.CONTENT_URI,
                             cv,

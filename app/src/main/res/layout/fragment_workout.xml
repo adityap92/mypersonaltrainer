@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rvExercises"/>
+        android:id="@+id/rvExercises" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/menu"
@@ -61,7 +62,7 @@
             android:src="@drawable/fab_add"
             fab:fab_label="@string/share"
             fab:fab_size="mini"
-            android:contentDescription="@string/share"/>
+            android:contentDescription="@string/share" />
 
         <com.github.clans.fab.FloatingActionButton
             android:theme="@style/MenuButtonsStyle"
@@ -71,7 +72,7 @@
             android:src="@drawable/fab_add"
             fab:fab_label="@string/add_exercise"
             fab:fab_size="mini"
-            android:contentDescription="@string/add_exercise"/>
+            android:contentDescription="@string/add_exercise" />
 
     </com.github.clans.fab.FloatingActionMenu>
 

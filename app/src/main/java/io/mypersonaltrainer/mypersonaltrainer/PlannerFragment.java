@@ -53,14 +53,15 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     boolean isTablet;
     int tabletPos;
 
-    public PlannerFragment(){}
+    public PlannerFragment() {
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mContext= getContext();
+        mContext = getContext();
 
         //get formatted date to display
         final String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
@@ -82,7 +83,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         //start loader for pulling Exercise data this week
         LoaderManager manager = getLoaderManager();
         Bundle bManager = new Bundle();
-        bManager.putInt("pos",posInWeek);
+        bManager.putInt("pos", posInWeek);
         manager.initLoader(0, bManager, this);
 
         adapter = new PlannerArrayAdapter(mContext,
@@ -91,7 +92,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         //if phone
-        if(!isTablet){
+        if (!isTablet) {
             //open workout for today
             lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -112,7 +113,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                             .commit();
                 }
             });
-        }else{
+        } else {
             //if tablet load master detail view
             tabletPos = posInWeek;
             WorkoutFragment workoutFragment = new WorkoutFragment();
@@ -152,25 +153,25 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     //create empty array for adapter
-    public ArrayList<Planner> retPlan(){
+    public ArrayList<Planner> retPlan() {
         ArrayList<Planner> plannerArr = new ArrayList<>();
-        plannerArr.add(new Planner("Sunday",""));
-        plannerArr.add(new Planner("Monday",""));
-        plannerArr.add(new Planner("Tuesday",""));
-        plannerArr.add(new Planner("Wednesday",""));
-        plannerArr.add(new Planner("Thursday",""));
-        plannerArr.add(new Planner("Friday",""));
-        plannerArr.add(new Planner("Saturday",""));
+        plannerArr.add(new Planner("Sunday", ""));
+        plannerArr.add(new Planner("Monday", ""));
+        plannerArr.add(new Planner("Tuesday", ""));
+        plannerArr.add(new Planner("Wednesday", ""));
+        plannerArr.add(new Planner("Thursday", ""));
+        plannerArr.add(new Planner("Friday", ""));
+        plannerArr.add(new Planner("Saturday", ""));
         return plannerArr;
     }
 
     //array of this weeks dates
-    public void setupDateArr(int pos){
+    public void setupDateArr(int pos) {
         Calendar cal = Calendar.getInstance();
         arrListWeek = new ArrayList<>();
         int begin = 0 - pos;
         cal.add(Calendar.DATE, begin);
-        for(int i = 0 ; i < 7; i++){
+        for (int i = 0; i < 7; i++) {
             String startWeek = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
             arrListWeek.add(startWeek);
             cal.add(Calendar.DATE, 1);
@@ -178,25 +179,25 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     //get muscle groups for each day
-    public void getMuscleGroup(Cursor cur){
+    public void getMuscleGroup(Cursor cur) {
 
         ArrayList<Planner> pa = adapter.getPlan();
-        if(cur.moveToFirst()){
-            do{
+        if (cur.moveToFirst()) {
+            do {
                 int index = arrListWeek.indexOf(cur.getString(cur.getColumnIndex(DBContract.WorkoutEntry.COLUMN_DATE)));
                 String s = ExerciseHolder.table.get(cur.getString(cur.getColumnIndex(DBContract.WorkoutEntry.COLUMN_EXERCISE_ID))).getMuscGroup();
                 String mg = pa.get(index).getMuscGroup();
-                if(mg.equals("")){
-                    pa.set(index,new Planner(getResources().getStringArray(R.array.days_of_week)[index], s));
-                }else if(!mg.contains(s))
-                    pa.set(index,new Planner(getResources().getStringArray(R.array.days_of_week)[index], mg + ", " +s));
-            }while(cur.moveToNext());
+                if (mg.equals("")) {
+                    pa.set(index, new Planner(getResources().getStringArray(R.array.days_of_week)[index], s));
+                } else if (!mg.contains(s))
+                    pa.set(index, new Planner(getResources().getStringArray(R.array.days_of_week)[index], mg + ", " + s));
+            } while (cur.moveToNext());
         }
         adapter.setPlan(pa);
     }
 
     //start loader to update view
-    public void startLoader(){
+    public void startLoader() {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
@@ -208,7 +209,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
 
         LoaderManager manager = getLoaderManager();
         Bundle bManager = new Bundle();
-        bManager.putInt("pos",posInWeek);
+        bManager.putInt("pos", posInWeek);
         manager.initLoader(0, bManager, this);
     }
 
@@ -229,7 +230,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //handle both loader ids
-        switch(id){
+        switch (id) {
             //queries planner table for workout IDs
             case 0:
                 Calendar cal = Calendar.getInstance();
@@ -241,7 +242,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                 String startWeek = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 
                 cal = Calendar.getInstance();
-                int end = 6-posInWeek;
+                int end = 6 - posInWeek;
                 cal.add(Calendar.DATE, end);
                 String endWeek = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 
@@ -250,7 +251,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                         DBContract.PlannerEntry.COLUMN_WORKOUT_ID
                 };
 
-                String selection = DBContract.PlannerEntry.COLUMN_DATE + " BETWEEN \'"+startWeek+"\' AND \'" + endWeek+"\'";
+                String selection = DBContract.PlannerEntry.COLUMN_DATE + " BETWEEN \'" + startWeek + "\' AND \'" + endWeek + "\'";
 
                 return new CursorLoader(mContext, DBContract.PlannerEntry.CONTENT_URI,
                         projection,
@@ -258,8 +259,8 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                         null, null);
             //queries Workout table with exercise IDs
             case 1:
-                String[] selectionArgs={};
-                if(args!=null){
+                String[] selectionArgs = {};
+                if (args != null) {
                     selectionArgs = args.getStringArray("ids");
                 }
                 String[] projection1 = {
@@ -267,7 +268,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                         DBContract.WorkoutEntry.COLUMN_EXERCISE_ID
                 };
 
-                String selection1 = DBContract.WorkoutEntry.COLUMN_DATE + " IN("+ makePlaceholders(selectionArgs.length)+")";
+                String selection1 = DBContract.WorkoutEntry.COLUMN_DATE + " IN(" + makePlaceholders(selectionArgs.length) + ")";
 
 
                 return new CursorLoader(mContext, DBContract.WorkoutEntry.CONTENT_URI,
@@ -297,7 +298,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
         //handle cursor return
-        switch(loader.getId()){
+        switch (loader.getId()) {
             case 0:
                 String[] ids = new String[cursor.getCount()];
                 if (cursor.moveToFirst()) {
@@ -306,8 +307,8 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                     } while (cursor.moveToNext());
                 }
                 Bundle bundle = new Bundle();
-                bundle.putStringArray("ids",ids);
-                getLoaderManager().initLoader(1,bundle,this);
+                bundle.putStringArray("ids", ids);
+                getLoaderManager().initLoader(1, bundle, this);
                 break;
             case 1:
                 getMuscleGroup(cursor);
@@ -321,7 +322,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     //Custom Array Adapter for Planner Fragment
-    public class PlannerArrayAdapter extends ArrayAdapter<Planner>{
+    public class PlannerArrayAdapter extends ArrayAdapter<Planner> {
 
         Context context;
         int layoutResourceId;
@@ -336,12 +337,12 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
             this.p = p;
         }
 
-        public void setPlan(ArrayList<Planner> p){
+        public void setPlan(ArrayList<Planner> p) {
             this.plan = p;
             notifyDataSetChanged();
         }
 
-        public ArrayList<Planner> getPlan(){
+        public ArrayList<Planner> getPlan() {
             return this.plan;
         }
 
@@ -351,7 +352,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
             //populate views
             View row = convertView;
 
-            if(row == null){
+            if (row == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
             }
@@ -359,21 +360,21 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
             TextView weekday = (TextView) row.findViewById(R.id.tvWeekDayPlanner);
             TextView muscGroup = (TextView) row.findViewById(R.id.tvGroupPlanner);
 
-            if(plan.get(position)!=null){
+            if (plan.get(position) != null) {
                 weekday.setText(plan.get(position).getWeekday());
                 muscGroup.setText(plan.get(position).getMuscGroup());
             }
 
-            if(!isTablet){
-                if(position == p){
+            if (!isTablet) {
+                if (position == p) {
                     row.setBackgroundResource(R.color.colorAccent);
-                }else
+                } else
                     row.setBackgroundResource(android.R.color.white);
 
-            }else{
-                if(position == tabletPos){
+            } else {
+                if (position == tabletPos) {
                     row.setBackgroundResource(R.color.colorAccent);
-                }else
+                } else
                     row.setBackgroundResource(android.R.color.white);
             }
 
@@ -386,11 +387,11 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
 
-    public class Planner{
+    public class Planner {
         String weekday;
         String muscGroup;
 
-        public Planner(String s, String s1){
+        public Planner(String s, String s1) {
             this.weekday = s;
             this.muscGroup = s1;
         }

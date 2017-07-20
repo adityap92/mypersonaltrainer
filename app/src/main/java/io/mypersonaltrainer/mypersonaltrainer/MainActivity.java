@@ -46,6 +46,7 @@ import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
  * Main Activity to handle sign in and
  * loading of json data
  * all fragments loaded in this activity
+ *
  * @author aditya
  */
 public class MainActivity extends AppCompatActivity {
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        if(savedInstanceState==null){
+        if (savedInstanceState == null) {
             //create data holder for exercises
             exerciseHolder = new ExerciseHolder();
             //start AsyncTask to read JSON file and populate exerciseHolder variabels
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             openFragment(loginFragment);
         }
         //force landscape if tablet
-        if(getResources().getBoolean(R.bool.isTablet)){
+        if (getResources().getBoolean(R.bool.isTablet)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         Log.e(TAG, "Google API client Failed to Connect");
                     }
-                } )
+                })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
@@ -109,30 +110,32 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch(id){
+        switch (id) {
             //back arrow on actionbar pressed
             case android.R.id.home:
                 onBackPressed();
-                if(getResources().getBoolean(R.bool.isTablet)){
-                   getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                if (getResources().getBoolean(R.bool.isTablet)) {
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 }
                 return true;
             //action when sign out is selected from menu
             case R.id.menu_sign_out:
-                    signOut();
-                    return true;
+                signOut();
+                return true;
+            case R.id.plot:
+                startActivity(new Intent(this, PlotActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void openFragment(Fragment frag){
+    public void openFragment(Fragment frag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, frag)
                 .commit();
     }
 
-    public void signOut(){
+    public void signOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
@@ -143,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //AsyncTask to load data from JSON file in background
-    private class JsonAsyncTask extends AsyncTask<String, Integer, String>{
+    private class JsonAsyncTask extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -172,14 +175,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static class LoginFragment extends Fragment{
+    public static class LoginFragment extends Fragment {
 
         @BindView(R.id.sign_in_button)
         SignInButton bLogin;
         Context mContext;
         public final String TAG = LoginFragment.class.getSimpleName();
 
-        public LoginFragment(){}
+        public LoginFragment() {
+        }
 
         @Nullable
         @Override
@@ -194,9 +198,9 @@ public class MainActivity extends AppCompatActivity {
             bLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isNetworkAvailable()){
+                    if (isNetworkAvailable()) {
                         signIn();
-                    }else{
+                    } else {
                         // Signed out, show unauthenticated UI.
                         Snackbar snackbar = Snackbar.make(getView(), getString(R.string.no_internet),
                                 Snackbar.LENGTH_LONG);
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //open Bio screen if first time user
-        private void startBioFrag(Bundle bundle){
+        private void startBioFrag(Bundle bundle) {
             BioFragment bioFrag = new BioFragment();
             bioFrag.setArguments(bundle);
             FragmentManager fragmentManager = getFragmentManager();
@@ -254,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //validate user in DB
-        private void isUserExist(String name){
+        private void isUserExist(String name) {
 
             String[] projection = {
                     DBContract.UsersEntry.COLUMN_USER_NAME
@@ -267,10 +271,10 @@ public class MainActivity extends AppCompatActivity {
                     projection,
                     selection,
                     selectionArgs,
-                    null,null);
+                    null, null);
 
-            if(cursor.getCount()>0){
-                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.welcome_back) + " " + name +"!",
+            if (cursor.getCount() > 0) {
+                Snackbar snackbar = Snackbar.make(getView(), getString(R.string.welcome_back) + " " + name + "!",
                         Snackbar.LENGTH_LONG);
                 int snackbarTextId = android.support.design.R.id.snackbar_text;
                 View view = snackbar.getView();
@@ -285,8 +289,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, plannerFragment)
                         .commit();
-            }
-            else{
+            } else {
                 //user doesnt exist so open Bio screen
                 Bundle bundle = new Bundle();
                 bundle.putString("full_name", name);
@@ -312,11 +315,11 @@ public class MainActivity extends AppCompatActivity {
             OptionalPendingResult<GoogleSignInResult> opr = Auth
                     .GoogleSignInApi.silentSignIn(mGoogleApiClient);
 
-            if(opr.isDone()){
+            if (opr.isDone()) {
                 Log.d(TAG, "Sign in was cached");
                 GoogleSignInResult result = opr.get();
                 handleSignInResult(result);
-            }else{
+            } else {
                 opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                     @Override
                     public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
@@ -325,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
+
         private boolean isNetworkAvailable() {
             ConnectivityManager connectivityManager
                     = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);

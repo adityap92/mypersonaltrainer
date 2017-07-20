@@ -48,7 +48,8 @@ public class BioFragment extends Fragment {
     Context mContext;
     String gender, tActivityLevel;
 
-    public BioFragment(){}
+    public BioFragment() {
+    }
 
     @Nullable
     @Override
@@ -60,7 +61,7 @@ public class BioFragment extends Fragment {
         Bundle bundle = getArguments();
 
         //get name from google account
-        if(bundle!=null){
+        if (bundle != null) {
             etFullName.setText(bundle.getString("full_name", ""));
         }
 
@@ -68,7 +69,7 @@ public class BioFragment extends Fragment {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-                switch(i){
+                switch (i) {
                     case R.id.rbMale:
                         gender = "M";
                         break;
@@ -108,8 +109,8 @@ public class BioFragment extends Fragment {
             public void onClick(View view) {
 
                 ContentValues cv = new ContentValues();
-                cv.put(DBContract.UsersEntry.COLUMN_USER_NAME,etFullName.getText().toString());
-                cv.put(DBContract.UsersEntry.COLUMN_USER_GENDER,gender);
+                cv.put(DBContract.UsersEntry.COLUMN_USER_NAME, etFullName.getText().toString());
+                cv.put(DBContract.UsersEntry.COLUMN_USER_GENDER, gender);
                 cv.put(DBContract.UsersEntry.COLUMN_USER_WEIGHT, npBioWeight.getValue());
                 cv.put(DBContract.UsersEntry.COLUMN_USER_HEIGHT, npBioHeight.getValue());
                 cv.put(DBContract.UsersEntry.COLUMN_USER_ACTIVITY_LEVEL, tActivityLevel);
@@ -117,7 +118,7 @@ public class BioFragment extends Fragment {
                         DBContract.UsersEntry.CONTENT_URI,
                         cv);
 
-                if(uri!=null){
+                if (uri != null) {
                     PlannerFragment plannerFragment = new PlannerFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()
@@ -130,7 +131,6 @@ public class BioFragment extends Fragment {
 
         return view;
     }
-
 
 
     @Override

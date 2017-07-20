@@ -25,14 +25,14 @@ public class ExerciseHolder {
     public static Map<String, Exercise> table;
 
     //constructor
-    public ExerciseHolder(){
+    public ExerciseHolder() {
         exerciseNames = new ArrayList<>();
         table = new HashMap<>();
         map = new HashMap<>();
     }
 
     //create exercise map for expandablelistview
-    public void setString(String json){
+    public void setString(String json) {
         try {
             obj = new JSONObject(json);
 
@@ -47,12 +47,12 @@ public class ExerciseHolder {
     }
 
     //build map and table from json string
-    public void buildMap(String key){
+    public void buildMap(String key) {
         try {
             exerciseArrayList = new ArrayList<>();
             arr = obj.getJSONArray(key);
             exerciseNames.add(key);
-            for(int i = 0 ; i < arr.length() ; i++){
+            for (int i = 0; i < arr.length(); i++) {
                 JSONObject o = arr.getJSONObject(i);
                 Exercise e = new Exercise(o.getString("id"),
                         o.getString("name"),
@@ -60,7 +60,7 @@ public class ExerciseHolder {
                         o.getString("vidUrl"),
                         key);
                 exerciseArrayList.add(e);
-                table.put(e.getId(),e);
+                table.put(e.getId(), e);
             }
             map.put(key, exerciseArrayList);
         } catch (JSONException e) {

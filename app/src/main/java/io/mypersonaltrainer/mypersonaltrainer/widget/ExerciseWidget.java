@@ -27,7 +27,7 @@ public class ExerciseWidget extends AppWidgetProvider {
 
         //create remote adapter for listview
         Intent intent = new Intent(context, ListWidgetService.class);
-        views.setRemoteAdapter(R.id.lvWidget,intent);
+        views.setRemoteAdapter(R.id.lvWidget, intent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);

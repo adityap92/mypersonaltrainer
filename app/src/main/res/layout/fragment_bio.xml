@@ -68,7 +68,8 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/radioGroup"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/weight"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -92,7 +93,8 @@
         app:layout_constraintRight_toRightOf="@+id/npBioWeight"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:id="@+id/npBioHeight" />
+        android:id="@+id/npBioHeight"
+        android:contentDescription="@string/height"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -116,7 +118,8 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/next"/>
 
     <RadioGroup
         android:layout_width="wrap_content"
@@ -137,14 +140,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/rbMale"
             android:text="@string/male"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:contentDescription="@string/male"/>
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rbFemale"
             android:text="@string/female"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:contentDescription="@string/female"/>
     </RadioGroup>
 
     <Spinner
@@ -161,7 +166,8 @@
         android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/npBioHeight"
         app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintVertical_bias="0.8"
+        android:contentDescription="@string/activity_levels"/>
 
 
 </android.support.constraint.ConstraintLayout>

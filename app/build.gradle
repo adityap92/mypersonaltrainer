@@ -2,9 +2,16 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'udacity'
+            keyPassword 'password'
+            storeFile file('$rootdir/keystore.jks')
+            storePassword 'password'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '25.0.0'
-
     defaultConfig {
         applicationId "io.mypersonaltrainer.mypersonaltrainer"
         minSdkVersion 21
@@ -16,6 +23,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -24,7 +32,7 @@ configurations{
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.google.android.gms:play-services-auth:9.0.0'

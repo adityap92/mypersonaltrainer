@@ -9,6 +9,6 @@
     <item
         android:id="@+id/plot"
         android:orderInCategory="99"
-        android:title="Plot Exercise"
+        android:title="@string/plot_exercise"
         app:showAsAction="never" />
 </menu>

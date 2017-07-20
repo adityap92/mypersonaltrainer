@@ -39,5 +39,9 @@
     <string name="share">Share</string>
     <string name="add_exercise">Add Exercise</string>
     <string name="no_internet">No Internet Available</string>
+    <string name="card_weight">Weight</string>
+    <string name="card_sets">Sets</string>
+    <string name="card_reps">Reps</string>
+    <string name="plot_exercise">Plot Exercises</string>
 
 </resources>

@@ -21,21 +21,21 @@ public class ExerciseHolder {
     public static Map<String, ArrayList<Exercise>> map;
     public static Map<String, Exercise> table;
 
-    public ExerciseHolder(String json){
+    public ExerciseHolder(){
+        exerciseNames = new ArrayList<>();
+        table = new HashMap<>();
+        map = new HashMap<>();
+    }
+
+    public void setString(String json){
         try {
             obj = new JSONObject(json);
-            exerciseNames = new ArrayList<>();
-            table = new HashMap<>();
-
-            map = new HashMap<>();
 
             buildMap("Arms");
             buildMap("Back");
             buildMap("Chest");
             buildMap("Shoulder");
             buildMap("Legs");
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        exerciseHolder = new ExerciseHolder(loadJSONFromAsset());
+        exerciseHolder = new ExerciseHolder();
 
+        new JsonAsyncTask().execute("exercises.json");
         if(savedInstanceState==null){
             loginFragment = new LoginFragment();
             openFragment(loginFragment);
@@ -130,22 +132,41 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
+    private class JsonAsyncTask extends AsyncTask<String, Integer, String>{
 
-            InputStream is = getAssets().open("exercises.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        @Override
+        protected String doInBackground(String... strings) {
+            exerciseHolder.setString(loadJSONFromAsset(strings[0]));
             return null;
         }
-        return json;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+
+        public String loadJSONFromAsset(String path) {
+            String json = null;
+            try {
+
+                InputStream is = getAssets().open(path);
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+                json = new String(buffer, "UTF-8");
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return null;
+            }
+            return json;
+        }
     }
 
     public static class LoginFragment extends Fragment{

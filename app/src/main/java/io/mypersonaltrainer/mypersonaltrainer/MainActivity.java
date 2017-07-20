@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResult(@NonNull Status status) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                openFragment(loginFragment);
+                openFragment(new LoginFragment());
             }
         });
     }

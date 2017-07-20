@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.plus.PlusShare;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,7 +49,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     @BindView(R.id.fbAddExercise)
     FloatingActionButton fbAddExercise;
     @BindView(R.id.fbAddCustomExercise)
-    FloatingActionButton fbAddCustomExercise;
+    FloatingActionButton fbShare;
     RecyclerView.LayoutManager rvLayoutManager;
     static RecyclerView.Adapter rvAdapter;
     Context mContext;
@@ -100,11 +104,31 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
             }
         });
 
-        fbAddCustomExercise.setOnClickListener(new View.OnClickListener() {
+        fbShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddCustomExerciseDialog dialog = new AddCustomExerciseDialog();
-                dialog.show(getFragmentManager(), "customDialog");
+                if(currWorkout.getExercises().size()>0){
+                    String share="";
+                    for(Exercise e : currWorkout.getExercises()){
+                        share+=e.getExerciseName() + " Sets: "+e.getSets() + " Reps: " + e.getReps() +"\n";
+                    }
+                    Intent shareIntent = new PlusShare.Builder(mContext)
+                            .setType("text/plain")
+                            .setText(share)
+                            .getIntent();
+                    startActivityForResult(shareIntent,0);
+                }else{
+                    Snackbar snackbar = Snackbar.make(getView(), getString(R.string.add_workout),
+                            Snackbar.LENGTH_LONG);
+                    int snackbarTextId = android.support.design.R.id.snackbar_text;
+                    View v = snackbar.getView();
+                    TextView textView = (TextView) v.findViewById(snackbarTextId);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        textView.setTextColor(getResources().getColor(R.color.white, null));
+                    }
+                    snackbar.show();
+                }
+
             }
         });
 
@@ -114,6 +138,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public void updateWorkouts(Cursor cur){
+        currWorkout.getExercises().clear();
         if(cur.moveToFirst()){
             do{
                 String index = cur.getString(cur.getColumnIndex(

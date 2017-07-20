@@ -59,8 +59,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
-            fab:fab_label="Add Custom Exercise"
-            fab:fab_size="mini"/>
+            fab:fab_label="@string/share"
+            fab:fab_size="mini"
+            android:contentDescription="@string/share"/>
 
         <com.github.clans.fab.FloatingActionButton
             android:theme="@style/MenuButtonsStyle"
@@ -68,8 +69,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/fab_add"
-            fab:fab_label="Add Exercise"
-            fab:fab_size="mini"/>
+            fab:fab_label="@string/add_exercise"
+            fab:fab_size="mini"
+            android:contentDescription="@string/add_exercise"/>
 
     </com.github.clans.fab.FloatingActionMenu>
 

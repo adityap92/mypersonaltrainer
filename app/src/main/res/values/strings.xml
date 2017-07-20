@@ -32,5 +32,11 @@
     <string name="sets">Sets:</string>
     <string name="reps">Reps:</string>
     <string name="this_week">This Week:</string>
+    <string name="add_workout">Add an exercise first!</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="delete">Delete Exercise</string>
+    <string name="sign_in">sign in</string>
+    <string name="share">Share</string>
+    <string name="add_exercise">Add Exercise</string>
 
 </resources>

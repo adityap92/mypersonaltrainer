@@ -64,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //create data holder for exercises
-        exerciseHolder = new ExerciseHolder();
-        //start AsyncTask to read JSON file and populate exerciseHolder variabels
-        new JsonAsyncTask().execute("exercises.json");
+
         if(savedInstanceState==null){
+            //create data holder for exercises
+            exerciseHolder = new ExerciseHolder();
+            //start AsyncTask to read JSON file and populate exerciseHolder variabels
+            new JsonAsyncTask().execute("exercises.json");
             loginFragment = new LoginFragment();
             openFragment(loginFragment);
         }

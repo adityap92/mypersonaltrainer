@@ -34,6 +34,7 @@ import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
 import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
 
 /**
+ * Planner Fragment to show workout exercises by day
  * Created by aditya on 7/10/17.
  */
 
@@ -48,7 +49,6 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     private Unbinder unbinder;
     Context mContext;
     ArrayList<String> arrListWeek;
-    //static ArrayList<Planner> plannerArr;
     static PlannerArrayAdapter adapter;
     boolean isTablet;
     int tabletPos;
@@ -62,18 +62,24 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         unbinder = ButterKnife.bind(this, view);
         mContext= getContext();
 
+        //get formatted date to display
         final String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
         tvPlannerDate.setText(formattedDate);
 
+        //get day of week and position in week array
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
         String dayOfTheWeek = sdf.format(d);
         List<String> arr = Arrays.asList(getResources().getStringArray(R.array.days_of_week));
+        //position in array for use elsewhere
         final int posInWeek = arr.indexOf(dayOfTheWeek);
 
+        //create array with this weeks dates
         setupDateArr(posInWeek);
+        //check if tablet or not
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
+        //start loader for pulling Exercise data this week
         LoaderManager manager = getLoaderManager();
         Bundle bManager = new Bundle();
         bManager.putInt("pos",posInWeek);
@@ -84,8 +90,9 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         lvWeekDays.setAdapter(adapter);
         ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
+        //if phone
         if(!isTablet){
-
+            //open workout for today
             lvWeekDays.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -93,6 +100,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                     Calendar cal = Calendar.getInstance();
                     cal.add(Calendar.DATE, diff);
 
+                    //pass date to workout fragment
                     WorkoutFragment workoutFragment = new WorkoutFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("date", new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()));
@@ -105,6 +113,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                 }
             });
         }else{
+            //if tablet load master detail view
             tabletPos = posInWeek;
             WorkoutFragment workoutFragment = new WorkoutFragment();
             Bundle bundle = new Bundle();
@@ -142,6 +151,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         return view;
     }
 
+    //create empty array for adapter
     public ArrayList<Planner> retPlan(){
         ArrayList<Planner> plannerArr = new ArrayList<>();
         plannerArr.add(new Planner("Sunday",""));
@@ -154,6 +164,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         return plannerArr;
     }
 
+    //array of this weeks dates
     public void setupDateArr(int pos){
         Calendar cal = Calendar.getInstance();
         arrListWeek = new ArrayList<>();
@@ -166,6 +177,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         }
     }
 
+    //get muscle groups for each day
     public void getMuscleGroup(Cursor cur){
 
         ArrayList<Planner> pa = adapter.getPlan();
@@ -183,6 +195,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         adapter.setPlan(pa);
     }
 
+    //start loader to update view
     public void startLoader(){
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         Date d = new Date();
@@ -215,8 +228,9 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
+        //handle both loader ids
         switch(id){
+            //queries planner table for workout IDs
             case 0:
                 Calendar cal = Calendar.getInstance();
 
@@ -242,6 +256,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
                         projection,
                         selection,
                         null, null);
+            //queries Workout table with exercise IDs
             case 1:
                 String[] selectionArgs={};
                 if(args!=null){
@@ -262,6 +277,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
 
     }
 
+    //helper method
     String makePlaceholders(int len) {
         if (len < 1) {
             // It will lead to an invalid query anyway ..
@@ -280,6 +296,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
+        //handle cursor return
         switch(loader.getId()){
             case 0:
                 String[] ids = new String[cursor.getCount()];
@@ -303,6 +320,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
+    //Custom Array Adapter for Planner Fragment
     public class PlannerArrayAdapter extends ArrayAdapter<Planner>{
 
         Context context;
@@ -330,6 +348,7 @@ public class PlannerFragment extends Fragment implements LoaderManager.LoaderCal
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            //populate views
             View row = convertView;
 
             if(row == null){

@@ -40,9 +40,15 @@ import butterknife.ButterKnife;
 import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
 import io.mypersonaltrainer.mypersonaltrainer.utils.ExerciseHolder;
 
-
+/**
+ * Main Activity to handle sign in and
+ * loading of json data
+ * all fragments loaded in this activity
+ * @author aditya
+ */
 public class MainActivity extends AppCompatActivity {
 
+    //instance variables
     static GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     public final String TAG = MainActivity.class.getSimpleName();
@@ -58,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //create data holder for exercises
         exerciseHolder = new ExerciseHolder();
-
+        //start AsyncTask to read JSON file and populate exerciseHolder variabels
         new JsonAsyncTask().execute("exercises.json");
         if(savedInstanceState==null){
             loginFragment = new LoginFragment();
@@ -71,20 +78,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        // profile
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
+        // Build a GoogleApiClient with access to the Google Sign-In API
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         Log.e(TAG, "Google API client Failed to Connect");
                     }
-                } /* OnConnectionFailedListener */)
+                } )
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
@@ -100,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch(id){
-
+            //back arrow on actionbar pressed
             case android.R.id.home:
                 onBackPressed();
                 if(getResources().getBoolean(R.bool.isTablet)){
@@ -132,24 +139,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //AsyncTask to load data from JSON file in background
     private class JsonAsyncTask extends AsyncTask<String, Integer, String>{
 
         @Override
         protected String doInBackground(String... strings) {
+            //call method to parse JSON
             exerciseHolder.setString(loadJSONFromAsset(strings[0]));
             return null;
         }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-
+        //load data from JSON file
         public String loadJSONFromAsset(String path) {
             String json = null;
             try {
@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
             mContext = getContext();
 
+            //setup login button-- must sign in with google account
             bLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -198,11 +199,13 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
 
+        //initiate sign in
         public void signIn() {
             Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
 
+        //depending on result validate user or display fail message
         private void handleSignInResult(GoogleSignInResult result) {
             Log.d(TAG, "handleSignInResult:" + result.isSuccess());
             if (result.isSuccess()) {
@@ -223,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        //open Bio screen if first time user
         private void startBioFrag(Bundle bundle){
             BioFragment bioFrag = new BioFragment();
             bioFrag.setArguments(bundle);
@@ -232,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+        //validate user in DB
         private void isUserExist(String name){
 
             String[] projection = {
@@ -257,8 +262,7 @@ public class MainActivity extends AppCompatActivity {
                     textView.setTextColor(getResources().getColor(R.color.white, null));
                 }
                 snackbar.show();
-
-
+                //open planner fragment if user exists
                 PlannerFragment plannerFragment = new PlannerFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction()
@@ -266,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                         .commit();
             }
             else{
+                //user doesnt exist so open Bio screen
                 Bundle bundle = new Bundle();
                 bundle.putString("full_name", name);
                 startBioFrag(bundle);

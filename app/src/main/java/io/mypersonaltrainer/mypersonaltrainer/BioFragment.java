@@ -25,11 +25,13 @@ import butterknife.Unbinder;
 import io.mypersonaltrainer.mypersonaltrainer.data.DBContract;
 
 /**
+ * Bio Fragment where user inputs personal data
  * Created by aditya on 7/10/17.
  */
 
 public class BioFragment extends Fragment {
 
+    //instance variables
     private Unbinder unbinder;
     @BindView(R.id.bNext)
     Button bNext;
@@ -57,14 +59,15 @@ public class BioFragment extends Fragment {
         mContext = getContext();
         Bundle bundle = getArguments();
 
+        //get name from google account
         if(bundle!=null){
             etFullName.setText(bundle.getString("full_name", ""));
         }
 
+        //read value from radio button
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-
                 switch(i){
                     case R.id.rbMale:
                         gender = "M";
@@ -99,6 +102,7 @@ public class BioFragment extends Fragment {
             }
         });
 
+        //insert personal data into User table
         bNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

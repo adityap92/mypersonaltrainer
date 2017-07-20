@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import io.mypersonaltrainer.mypersonaltrainer.utils.Exercise;
 
 /**
+ * Display Exercise Details
  * Created by aditya on 7/11/17.
  */
 
@@ -40,13 +41,17 @@ public class ExerciseDetailFragment extends Fragment {
         if(bundle!=null){
             currExercise = (Exercise) bundle.getSerializable("exercise");
         }
+        //navigate back to previous fragment
         ((MainActivity) getContext()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tvInstructionsDetail.setText(currExercise.getExerciseInstruction());
 
+        //initialize youtube fragment
         youtubeFragment = (YouTubePlayerSupportFragment) getChildFragmentManager().findFragmentById(R.id.youtube_fragment);
 
+        //check if video id provided
         if(!currExercise.getVidUrl().equals("")) {
 
+            //initialize with api key
             youtubeFragment.initialize(getString(R.string.yt_api_key), new YouTubePlayer.OnInitializedListener() {
                 @Override
                 public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
@@ -71,10 +76,7 @@ public class ExerciseDetailFragment extends Fragment {
                     snackbar.show();
                 }
             });
-        }else{
-
         }
-
 
         return view;
     }

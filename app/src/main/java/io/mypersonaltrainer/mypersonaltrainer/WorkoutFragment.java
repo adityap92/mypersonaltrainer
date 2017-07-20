@@ -67,15 +67,18 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         unbinder = ButterKnife.bind(this, view1);
         mContext = getContext();
 
+        //get date passed from planner fragment
         Bundle bundle = getArguments();
         if(bundle!=null)
             formattedDate = bundle.getString("date");
 
+        //initialize workout
         currWorkout = new Workout();
 
-
+        //start loader for exercise data
         getLoaderManager().initLoader(2,null,this);
 
+        //check if tablet or phone
         boolean isTablet = getResources().getBoolean(R.bool.isTablet);
         if(!isTablet){
             ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,14 +87,13 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
             rvExercises.setLayoutManager(rvLayoutManager);
             rvExercises.setAdapter(rvAdapter);
         }else{
+            //load grid layout if tablet
             rvLayoutManager = new GridLayoutManager(mContext,2);
             rvAdapter = new ExercisesAdapter(currWorkout);
             rvExercises.setLayoutManager(rvLayoutManager);
             rvExercises.setAdapter(rvAdapter);
         }
-
-
-
+        //onclicklistener for adding exercises from FAB
         fbAddExercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +106,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
             }
         });
 
+        //share workout to google+
         fbShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,6 +140,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
         return view1;
     }
 
+    //update UI once cursor is returned
     public void updateWorkouts(Cursor cur){
         currWorkout.getExercises().clear();
         if(cur.moveToFirst()){
@@ -168,6 +172,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+        //load workout ID from Planner Table
         switch(id){
             case 2:
                 String[] projection = {
@@ -182,6 +187,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                         projection,
                         selection,
                         null, null);
+            //load exercise IDs from Workout Table
             case 3:
                 String date="";
                 if(args!=null){
@@ -206,6 +212,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        //handle cursor return
         switch(loader.getId()){
             case 2:
                 String date = "";
@@ -281,6 +288,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
 
             holder.tvName.setText(e.getExerciseName());
 
+            //delete exercise from workout
             holder.bDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -289,6 +297,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                     builder.setMessage(R.string.are_u_sure)
                             .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+                                    //query for ID in workout table
                                     String selection = DBContract
                                             .WorkoutEntry.COLUMN_EXERCISE_ID + " = ? AND "
                                             + DBContract.WorkoutEntry.COLUMN_DATE + " = "
@@ -300,6 +309,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                                            selection,
                                            selectionArgs);
                                     if(rows > 0){
+                                        //check that rows were actually deleted
                                         currWorkout.getExercises().remove(pos);
                                         rvAdapter.notifyDataSetChanged();
                                     }
@@ -318,6 +328,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 }
             });
 
+            //load exercise detail information
             holder.bMoreInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -334,6 +345,7 @@ public class WorkoutFragment extends Fragment implements LoaderManager.LoaderCal
                 }
             });
 
+            //load exercise data and set numberpickers accordingly
             holder.npWeight.setValue(e.getWeight());
             holder.npWeight.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                 @Override

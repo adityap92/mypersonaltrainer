@@ -3,11 +3,13 @@ package io.mypersonaltrainer.mypersonaltrainer.utils;
 import java.io.Serializable;
 
 /**
+ * Exercise object to store data for easier access
  * Created by aditya on 7/12/17.
  */
 
 public class Exercise implements Serializable {
 
+    //instance variables
     String id;
     String exerciseName;
     String exerciseInstruction;
@@ -15,6 +17,7 @@ public class Exercise implements Serializable {
     int weight, sets, reps;
     String muscGroup;
 
+    //constructor
     public Exercise(String id,String exerciseName, String exerciseInstruction, String vidUrl, String muscGroup){
         this.id = id;
         this.exerciseName = exerciseName;
@@ -26,6 +29,7 @@ public class Exercise implements Serializable {
         this.muscGroup = muscGroup;
     }
 
+    //getters and setters
     public String getId() {
         return id;
     }

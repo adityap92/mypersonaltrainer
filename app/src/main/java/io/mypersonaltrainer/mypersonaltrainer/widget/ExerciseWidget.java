@@ -19,11 +19,13 @@ public class ExerciseWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
+        //get todays date
         String formattedDate = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.exercise_widget);
         views.setTextViewText(R.id.appwidget_text, formattedDate);
 
+        //create remote adapter for listview
         Intent intent = new Intent(context, ListWidgetService.class);
         views.setRemoteAdapter(R.id.lvWidget,intent);
 

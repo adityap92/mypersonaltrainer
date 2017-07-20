@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
+ * Content Provider for personalFitness.db
  * Created by aditya on 7/15/17.
  */
 
@@ -51,6 +52,7 @@ public class FitnessContentProvider extends ContentProvider {
         final SQLiteDatabase db = database.getReadableDatabase();
 
         int match = sUriMatcher.match(uri);
+        //returned cursor with query results
         Cursor retCursor;
 
         switch(match){
@@ -102,6 +104,7 @@ public class FitnessContentProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
 
+        //return uri of inserted row
         Uri returnUri;
 
         switch(match){
@@ -136,6 +139,7 @@ public class FitnessContentProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = database.getWritableDatabase();
+        //rows deleted
         int rowsDeleted = 0;
 
         int match = sUriMatcher.match(uri);
@@ -154,6 +158,7 @@ public class FitnessContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
         final SQLiteDatabase db = database.getWritableDatabase();
+        //rows updated
         int count = -1;
 
         int match = sUriMatcher.match(uri);

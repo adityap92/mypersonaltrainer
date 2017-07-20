@@ -43,6 +43,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory{
         exercises = new ArrayList<WidgetEx>();
     }
 
+    //query database for todays exercises
     @Override
     public void onDataSetChanged() {
         Cursor cursor;
@@ -120,6 +121,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory{
         return exercises.size();
     }
 
+    //update widget view
     @Override
     public RemoteViews getViewAt(int pos) {
         RemoteViews views = new RemoteViews(mContext.getPackageName(),
@@ -150,6 +152,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory{
         return true;
     }
 
+    //widget POJO for easier data access
     public class WidgetEx{
         String name, sets, reps;
         public WidgetEx(String n, String s, String r){

@@ -16,7 +16,7 @@ public class DBContract {
     public static final String PATH_PLANNER = "planner";
     public static final String PATH_WORKOUT = "workout";
 
-
+    //define Users Table values
     public static final class UsersEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -30,6 +30,7 @@ public class DBContract {
         public static final String COLUMN_USER_ACTIVITY_LEVEL = "activityLevel";
     }
 
+    //define Planner Table values
     public static final class PlannerEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
@@ -41,6 +42,7 @@ public class DBContract {
 
     }
 
+    //define Workout Table values
     public static final class WorkoutEntry implements BaseColumns{
 
         public static final Uri CONTENT_URI =

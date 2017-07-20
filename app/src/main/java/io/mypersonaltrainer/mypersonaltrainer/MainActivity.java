@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -192,7 +194,21 @@ public class MainActivity extends AppCompatActivity {
             bLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    signIn();
+                    if(isNetworkAvailable()){
+                        signIn();
+                    }else{
+                        // Signed out, show unauthenticated UI.
+                        Snackbar snackbar = Snackbar.make(getView(), getString(R.string.no_internet),
+                                Snackbar.LENGTH_LONG);
+                        int snackbarTextId = android.support.design.R.id.snackbar_text;
+                        View v = snackbar.getView();
+                        TextView textView = (TextView) v.findViewById(snackbarTextId);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            textView.setTextColor(getResources().getColor(R.color.white, null));
+                        }
+                        snackbar.show();
+                    }
+
                 }
             });
             ((MainActivity) mContext).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -308,6 +324,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+        }
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
     }
 

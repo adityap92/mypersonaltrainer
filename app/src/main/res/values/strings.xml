@@ -38,5 +38,6 @@
     <string name="sign_in">sign in</string>
     <string name="share">Share</string>
     <string name="add_exercise">Add Exercise</string>
+    <string name="no_internet">No Internet Available</string>
 
 </resources>

@@ -122,6 +122,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_sign_out:
                 signOut();
                 return true;
+            case R.id.plot:
+                startActivity(new Intent(this, HistoryActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
